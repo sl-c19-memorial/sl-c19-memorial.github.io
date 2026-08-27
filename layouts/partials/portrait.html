@@ -8,4 +8,6 @@
     {{- with resources.Get . -}}{{- $src = . -}}{{- $isPhoto = true -}}{{- end -}}
   {{- end -}}
 {{- end -}}
-<img class="flower{{ if $isPhoto }} photo{{ end }}" src="{{ $src.RelPermalink }}" width="{{ $size }}" height="{{ $size }}" loading="lazy" alt="" />
+{{- $alt := "" -}}
+{{- if and $isPhoto $p.personName -}}{{- $alt = $p.personName -}}{{- end -}}
+<img class="flower{{ if $isPhoto }} photo{{ end }}" src="{{ $src.RelPermalink }}" width="{{ $size }}" height="{{ $size }}" loading="lazy" alt="{{ $alt }}" />

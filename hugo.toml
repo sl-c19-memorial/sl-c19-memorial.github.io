@@ -60,6 +60,7 @@ defaultContentLanguageInSubdir = false
 [languages.en]
   label = "English"
   locale = "en-LK"
+  title = "Sri Lanka COVID-19 Memorial"
   weight = 1
   [languages.en.params]
     description = "In memory of those we lost to COVID-19 in Sri Lanka."
@@ -67,6 +68,7 @@ defaultContentLanguageInSubdir = false
 [languages.si]
   label = "සිංහල"
   locale = "si-LK"
+  title = "ශ්‍රී ලංකාව කෝවිඩ්-19 අනුස්මරණ ස්මාරකය"
   weight = 2
   [languages.si.params]
     description = "ශ්‍රී ලංකාවේ කෝවිඩ්-19 නිසා මිය ගිය පුද්ගලයින් සිහි කිරීම පිණිස"
@@ -74,6 +76,7 @@ defaultContentLanguageInSubdir = false
 [languages.ta]
   label = "தமிழ்"
   locale = "ta-LK"
+  title = "இலங்கை கோவிட்-19 நினைவகம்"
   weight = 3
   [languages.ta.params]
     description = "இலங்கையில் கோவிட்-19 இனால் உயிரிழந்தவர்களை நினைவுகூரும் வகையில்"
