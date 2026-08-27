@@ -14,6 +14,10 @@
 <meta property="og:url" content="{{ .Permalink }}" />
 <meta property="og:image" content="{{ site.Params.ogImage | absURL }}" />
 <meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:url" content="{{ .Permalink }}" />
+<meta name="twitter:title" content="{{ $title }}" />
+<meta name="twitter:description" content="{{ $desc }}" />
+<meta name="twitter:image" content="{{ site.Params.ogImage | absURL }}" />
 
 {{- range .AllTranslations }}
   <link rel="alternate" hreflang="{{ .Language.Lang }}" href="{{ .Permalink }}" />
