@@ -1,0 +1,13 @@
+{{ define "main" }}
+  {{ $people := sort .Pages "Params.deathDate" "desc" }}
+  <p class="muted"><a href="{{ .Parent.RelPermalink }}">&larr; All {{ .Parent.Title | lower }}</a></p>
+  <h1>{{ .Title }}</h1>
+  <p class="muted">{{ len $people }} people documented</p>
+  {{ $paged := .Paginate $people }}
+  <div class="grid">
+    {{ range $paged.Pages }}
+      {{ partial "person-cell.html" . }}
+    {{ end }}
+  </div>
+  {{ partial "pagination.html" . }}
+{{ end }}

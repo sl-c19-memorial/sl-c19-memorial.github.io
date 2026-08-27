@@ -1,0 +1,41 @@
+baseURL = "https://srilankac19memorial.org/"
+# languageCode moved under [languages] in Stage C; single-language for now
+title = "Sri Lanka COVID-19 Memorial"
+enableRobotsTXT = true
+
+# Stage A is English-only plain HTML. Sinhala / Tamil are added in Stage C
+# (see PROJECT_PLAN.md) via Hugo's native multilingual mode.
+defaultContentLanguage = "en"
+
+# Documented people are generated at build time from data/covid19_deaths.json
+# by content/people/_content.gotmpl -- no per-person Markdown files are committed.
+[params]
+  description = "In memory of those we lost to COVID-19 in Sri Lanka."
+  # These two numbers are refreshed by scripts/fetch-data.mjs into
+  # data/site_stats.json and surfaced here through layouts.
+  ogImage = "/share_img.png"
+
+[pagination]
+  pagerSize = 96
+
+[taxonomies]
+  province = "provinces"
+  district = "districts"
+  year = "years"
+  sex = "sexes"
+  ageband = "agebands"
+  source = "sources"
+
+[markup.goldmark.renderer]
+  unsafe = true
+
+[outputs]
+  home = ["HTML", "RSS"]
+  section = ["HTML"]
+
+[minify]
+  disableJSON = false
+  minifyOutput = true
+
+[permalinks]
+  people = "/person/:slug/"

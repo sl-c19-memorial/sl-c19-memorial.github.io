@@ -1,0 +1,28 @@
+{{ define "main" }}
+  <h1>{{ .Title }}</h1>
+  <div class="prose">{{ .Content }}</div>
+
+  {{ $labels := dict
+    "provinces" "Province"
+    "districts" "District"
+    "years" "Year of death"
+    "sexes" "Sex"
+    "agebands" "Age band"
+    "sources" "Source"
+  }}
+  {{ range $name, $terms := site.Taxonomies }}
+    <section class="browse-group">
+      <h2>{{ index $labels $name | default (humanize $name) }}</h2>
+      <ul class="term-list">
+        {{ range $terms.ByCount }}
+          <li>
+            <a href="{{ .Page.RelPermalink }}">
+              <span>{{ .Page.Title }}</span>
+              <span class="count">{{ .Count }}</span>
+            </a>
+          </li>
+        {{ end }}
+      </ul>
+    </section>
+  {{ end }}
+{{ end }}

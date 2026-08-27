@@ -1,0 +1,36 @@
+{{ define "main" }}
+  {{ $stats := hugo.Data.site_stats }}
+  {{ $people := where site.RegularPages "Type" "people" }}
+  {{ $people = sort $people "Params.deathDate" "desc" }}
+
+  <section class="card intro">
+    <div class="card-body">
+      <h2>{{ with $stats.cumDeaths }}{{ lang.FormatNumberCustom 0 . }}{{ else }}Thousands of{{ end }} people have died due to COVID-19 in Sri Lanka</h2>
+      <p>
+        Through this memorial, we hope to remember them as more than numbers; they
+        are civilians and healthcare workers; spouses, siblings, parents,
+        children, friends and loved ones. Each individual has their own story,
+        and leaves behind a unique legacy.
+      </p>
+      <p>
+        We have so far documented the details of
+        <strong>{{ len $people }}</strong> people and will continue to add them as
+        we find more details.
+      </p>
+      <p class="muted">
+        <em
+          >Each flower represents one person and shares their age, sex and where
+          they are from, as recorded by the government.</em
+        >
+      </p>
+    </div>
+  </section>
+
+  {{ $paged := .Paginate $people }}
+  <div class="grid">
+    {{ range $paged.Pages }}
+      {{ partial "person-cell.html" . }}
+    {{ end }}
+  </div>
+  {{ partial "pagination.html" . }}
+{{ end }}

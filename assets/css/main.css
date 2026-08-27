@@ -1,0 +1,370 @@
+/* --------------------------------------------------------------------------
+   Sri Lanka COVID-19 Memorial -- static build
+   Palette + shapes ported from the original DaisyUI "light" theme
+   (see memorial-web/tailwind.config.js).
+   -------------------------------------------------------------------------- */
+
+:root {
+  --primary: #5c7f67;
+  --primary-focus: #48614f;
+  --primary-content: #ffffff;
+  --secondary: #ecf4e7;
+  --secondary-content: #24331a;
+  --accent: #fae5e5;
+  --accent-content: #322020;
+  --neutral: #5d5656;
+  --neutral-focus: #2a2727;
+  --neutral-content: #e9e7e7;
+  --base-100: #c6c3c3;
+  --base-200: #c1bebe;
+  --base-300: #b9b1b1;
+  --base-content: #100f0f;
+  --info: #2094f3;
+  --success: #009485;
+  --warning: #ff9900;
+  --error: #ff5724;
+
+  --rounded-box: 1rem;
+  --rounded-btn: 0.5rem;
+  --rounded-badge: 1.9rem;
+
+  --font-sans: "Noto Sans", "Noto Sans Sinhala", "Noto Sans Tamil",
+    system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+
+  --container: 72rem;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--base-100);
+  color: var(--base-content);
+  font-family: var(--font-sans);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: var(--primary-focus);
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+.container {
+  width: 100%;
+  max-width: var(--container);
+  margin-inline: auto;
+  padding-inline: 1rem;
+}
+
+/* --- Header ------------------------------------------------------------- */
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  background: var(--base-100);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.site-header .bar {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding-block: 1rem 0.75rem;
+}
+
+.brand {
+  text-decoration: none;
+  color: inherit;
+  flex-grow: 1;
+}
+
+.brand .brand-title {
+  font-size: 1rem;
+  margin: 0;
+}
+
+.brand .brand-sub {
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.site-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+  font-weight: 700;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.site-nav a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.site-nav a:hover {
+  text-decoration: underline;
+}
+
+/* --- Layout shells ---------------------------------------------------------- */
+
+main {
+  flex-grow: 1;
+  padding-block: 1rem 2rem;
+}
+
+.card {
+  background: var(--base-200);
+  border-radius: var(--rounded-box);
+}
+
+.card-body {
+  padding: 1.5rem;
+}
+
+.intro {
+  background: var(--base-300);
+  margin-block: 0.5rem 1.5rem;
+}
+
+.intro h2 {
+  margin-top: 0;
+}
+
+.prose {
+  max-width: 42rem;
+}
+
+.prose h2 {
+  margin-top: 2rem;
+}
+
+.muted {
+  color: #4a4646;
+  font-size: 0.9rem;
+}
+
+/* --- Flower grid ---------------------------------------------------------- */
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.5rem;
+}
+
+@media (min-width: 768px) {
+  .grid {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .grid {
+    grid-template-columns: repeat(8, minmax(0, 1fr));
+  }
+}
+
+.cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 1rem 0.25rem;
+  text-decoration: none;
+  color: inherit;
+  border-radius: var(--rounded-btn);
+  transition: transform 0.4s ease-out, background 0.2s ease-out;
+}
+
+.cell:hover,
+.cell:focus-visible {
+  transform: scale(1.08);
+  background: var(--secondary);
+  outline: none;
+}
+
+.cell .name {
+  font-size: 0.7rem;
+  min-height: 2rem;
+  text-transform: uppercase;
+  color: #34302f;
+}
+
+.cell .flower {
+  width: 96px;
+  height: 96px;
+  margin: 0.5rem 0;
+}
+
+.cell .flower.photo {
+  border-radius: 50%;
+  object-fit: cover;
+  filter: grayscale(1);
+}
+
+.cell .age {
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.cell .place,
+.cell .date {
+  font-size: 0.72rem;
+}
+
+/* --- Person page --------------------------------------------------------- */
+
+.person {
+  max-width: 34rem;
+  margin-inline: auto;
+  text-align: center;
+}
+
+.person .flower {
+  width: 160px;
+  height: 160px;
+}
+
+.person .flower.photo {
+  border-radius: 50%;
+  object-fit: cover;
+  filter: grayscale(1);
+}
+
+.person dl {
+  text-align: left;
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 0.35rem 1rem;
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+.person dt {
+  font-weight: 700;
+}
+
+.person dd {
+  margin: 0;
+}
+
+/* --- Term / browse listings ------------------------------------------- */
+
+.term-list {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr));
+  gap: 0.5rem;
+}
+
+.term-list a {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.6rem 0.9rem;
+  background: var(--base-200);
+  border-radius: var(--rounded-btn);
+  text-decoration: none;
+  color: inherit;
+}
+
+.term-list a:hover {
+  background: var(--secondary);
+}
+
+.term-list .count {
+  font-weight: 700;
+  color: var(--primary-focus);
+}
+
+.browse-group {
+  margin-block: 1.5rem;
+}
+
+.browse-group h2 {
+  margin-bottom: 0.5rem;
+}
+
+/* --- Pagination -------------------------------------------------------- */
+
+.pager {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-top: 2rem;
+}
+
+.pager a,
+.pager span {
+  padding: 0.4rem 0.75rem;
+  border-radius: var(--rounded-btn);
+  text-decoration: none;
+  color: inherit;
+  background: var(--base-200);
+}
+
+.pager .current {
+  background: var(--primary);
+  color: var(--primary-content);
+}
+
+.btn {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  border-radius: var(--rounded-btn);
+  background: var(--primary);
+  color: var(--primary-content);
+  text-decoration: none;
+  font-weight: 700;
+}
+
+/* --- Footer ---------------------------------------------------------------- */
+
+.site-footer {
+  background: var(--neutral);
+  color: var(--neutral-content);
+  padding: 2.5rem 0;
+}
+
+.site-footer .container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  justify-content: space-between;
+}
+
+.site-footer a {
+  color: var(--neutral-content);
+}
+
+.site-footer .footer-title {
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  opacity: 0.7;
+  display: block;
+  margin-bottom: 0.4rem;
+}

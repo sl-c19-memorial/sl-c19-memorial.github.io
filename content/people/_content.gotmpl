@@ -1,0 +1,68 @@
+{{/*
+  Content adapter: generate one page per documented person from
+  data/covid19_deaths.json. No Markdown files are committed for people.
+  Permalink is /person/<indexKey>/ (see [permalinks] in hugo.toml).
+*/}}
+{{ $people := hugo.Data.covid19_deaths }}
+
+{{ range $person := $people }}
+  {{ $key := $person.indexKey }}
+  {{ $slug := or $person.slug $person.indexKey }}
+
+  {{/* Age band mirrors the filter buckets from the original site. */}}
+  {{ $ageStr := string (or $person.ageValue "") }}
+  {{ $ageNum := 0 }}
+  {{ with $ageStr }}{{ $ageNum = int (index (split . "-") 0) }}{{ end }}
+  {{ $band := "unknown" }}
+  {{ if $ageStr }}
+    {{ if lt $ageNum 30 }}{{ $band = "below-30" }}
+    {{ else if lt $ageNum 60 }}{{ $band = "30-59" }}
+    {{ else }}{{ $band = "60-and-above" }}{{ end }}
+  {{ end }}
+
+  {{ $year := "unknown" }}
+  {{ with $person.deathDate }}{{ $year = substr . 0 4 }}{{ end }}
+
+  {{ $sex := or $person.gender "Unknown" }}
+  {{ $src := or $person.sourceType "UNRECORDED" }}
+  {{ $place := or $person.city $person.district $person.province "Sri Lanka" }}
+  {{ $ageLabel := cond (ne $ageStr "") (printf "Age %s" $ageStr) "Age unknown" }}
+
+  {{ $name := "" }}
+  {{ with $person.detail }}{{ $name = or .name "" }}{{ end }}
+
+  {{ $params := dict
+    "indexKey" $key
+    "deathDate" $person.deathDate
+    "province" (or $person.province "")
+    "district" (or $person.district "")
+    "city" (or $person.city "")
+    "deathPlace" (or $person.deathPlace "")
+    "ageType" (or $person.ageType "")
+    "ageValue" $ageStr
+    "ageBand" $band
+    "sex" $sex
+    "incarcerated" (or $person.incarcerated false)
+    "sourceType" $src
+    "sourceRef" (or $person.sourceRef "")
+    "personName" $name
+    "hasDetail" (ne $name "")
+    "detail" $person.detail
+    "provinces" (slice (or $person.province "Unrecorded"))
+    "districts" (slice (or $person.district "Unrecorded"))
+    "years" (slice $year)
+    "sexes" (slice $sex)
+    "agebands" (slice $band)
+    "sources" (slice $src)
+  }}
+
+  {{ $.AddPage (dict
+    "kind" "page"
+    "path" $slug
+    "slug" $slug
+    "title" (printf "%s, %s — %s" $ageLabel $sex $place)
+    "params" $params
+    "dates" (dict "date" (time.AsTime $person.deathDate))
+    "content" (dict "mediaType" "text/markdown" "value" "")
+  ) }}
+{{ end }}

@@ -1,0 +1,20 @@
+{{- /* Expects a person Page as the context. */ -}}
+{{- $p := .Params -}}
+{{- $flower := resources.Get "img/flower.png" -}}
+{{- $photo := "" -}}
+{{- with $p.detail }}{{ $photo = .photo }}{{ end -}}
+<a class="cell" href="{{ .RelPermalink }}">
+  <span class="name">
+    {{- if $p.personName }}{{ $p.personName }}{{ else }}Name unknown{{ end -}}
+  </span>
+  {{ if $photo }}
+    <img class="flower photo" src="{{ $photo }}" width="96" height="96" loading="lazy" alt="" />
+  {{ else }}
+    <img class="flower" src="{{ $flower.RelPermalink }}" width="96" height="96" loading="lazy" alt="A flower representing one person" />
+  {{ end }}
+  <span class="age">
+    {{- with $p.ageValue }}{{ . }}{{ else }}Age unknown{{ end }}{{ with $p.sex }}, {{ . }}{{ end -}}
+  </span>
+  <span class="place">{{ with $p.city }}{{ . }}{{ else }}{{ $p.district }}{{ end }}</span>
+  <span class="date">{{ with $p.deathDate }}{{ dateFormat "2 Jan 2006" . }}{{ end }}</span>
+</a>

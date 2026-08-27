@@ -1,0 +1,13 @@
+{{ define "main" }}
+  <h1>Browse by {{ .Title | lower }}</h1>
+  <ul class="term-list">
+    {{ range .Pages.ByTitle }}
+      <li>
+        <a href="{{ .RelPermalink }}">
+          <span>{{ .Title }}</span>
+          <span class="count">{{ len .Pages }}</span>
+        </a>
+      </li>
+    {{ end }}
+  </ul>
+{{ end }}

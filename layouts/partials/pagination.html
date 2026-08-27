@@ -1,0 +1,16 @@
+{{- $p := .Paginator -}}
+{{- if gt $p.TotalPages 1 -}}
+<nav class="pager" aria-label="Pagination">
+  {{ if $p.HasPrev }}<a href="{{ $p.Prev.URL }}">&larr; Newer</a>{{ else }}<span>&larr; Newer</span>{{ end }}
+  {{ range $p.Pagers }}
+    {{ if eq . $p }}
+      <span class="current">{{ .PageNumber }}</span>
+    {{ else if or (le .PageNumber 2) (ge .PageNumber (sub $p.TotalPages 1)) (lt (math.Abs (sub .PageNumber $p.PageNumber)) 3) }}
+      <a href="{{ .URL }}">{{ .PageNumber }}</a>
+    {{ else if or (eq .PageNumber 3) (eq .PageNumber (sub $p.TotalPages 2)) }}
+      <span>&hellip;</span>
+    {{ end }}
+  {{ end }}
+  {{ if $p.HasNext }}<a href="{{ $p.Next.URL }}">Older &rarr;</a>{{ else }}<span>Older &rarr;</span>{{ end }}
+</nav>
+{{- end -}}

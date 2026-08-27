@@ -1,0 +1,21 @@
+{{ $stats := hugo.Data.site_stats }}
+<footer class="site-footer">
+  <div class="container">
+    <div>
+      <p class="footer-title">COVID-19 Memorial</p>
+      <p>In memory of those we lost to COVID-19 in Sri Lanka.</p>
+      <p class="muted">
+        {{ with $stats.documented }}{{ . }} people documented{{ end }}
+        {{ with $stats.refreshedAt }} &middot; data refreshed {{ dateFormat "2 Jan 2006" . }}{{ end }}
+      </p>
+      <p class="muted">Copyright &copy; 2021 &middot; MIT-licensed open data and source.</p>
+    </div>
+    <div>
+      <span class="footer-title">Source</span>
+      <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:.25rem">
+        <li><a href="https://github.com/sl-c19-memorial/memorial-dataset">Death records dataset</a></li>
+        <li><a href="https://github.com/sl-c19-memorial/scraped-dgi-reports">Scraped DGI reports</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>

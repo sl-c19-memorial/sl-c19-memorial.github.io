@@ -1,0 +1,63 @@
+{{ define "main" }}
+  {{ $p := .Params }}
+  {{ $flower := resources.Get "img/flower.png" }}
+  {{ $photo := "" }}
+  {{ with $p.detail }}{{ $photo = .photo }}{{ end }}
+
+  <p class="muted"><a href="{{ "/" | relURL }}">&larr; All {{ len (where site.RegularPages "Type" "people") }} people</a></p>
+
+  <article class="card">
+    <div class="card-body person">
+      {{ if $p.personName }}<h1>{{ $p.personName }}</h1>{{ else }}<h1>Name unknown</h1>{{ end }}
+
+      {{ if $photo }}
+        <img class="flower photo" src="{{ $photo }}" width="160" height="160" alt="" />
+      {{ else }}
+        <img class="flower" src="{{ $flower.RelPermalink }}" width="160" height="160" alt="A flower representing one person" />
+      {{ end }}
+
+      <p class="age">
+        {{ with $p.ageValue }}{{ . }}{{ else }}Age unknown{{ end }}{{ with $p.sex }}, {{ . }}{{ end }}
+      </p>
+      <p class="place">
+        {{ with $p.city }}{{ . }}{{ else }}{{ $p.district }}{{ end }}
+      </p>
+      <p class="date">
+        {{ with $p.deathDate }}Died {{ dateFormat "2 January 2006" . }}{{ end }}
+      </p>
+
+      {{ with $p.detail }}
+        {{ with .description }}<p>{{ . }}</p>{{ end }}
+      {{ end }}
+
+      <dl>
+        {{ with $p.detail }}{{ with .occupation }}
+          <dt>Occupation</dt><dd>{{ . }}</dd>
+        {{ end }}{{ end }}
+        <dt>Province</dt>
+        <dd><a href="{{ (printf "/provinces/%s/" (urlize $p.province)) | relURL }}">{{ $p.province }}</a></dd>
+        <dt>District</dt>
+        <dd><a href="{{ (printf "/districts/%s/" (urlize $p.district)) | relURL }}">{{ $p.district }}</a></dd>
+        {{ with $p.city }}<dt>City</dt><dd>{{ . }}</dd>{{ end }}
+        {{ with $p.deathPlace }}<dt>Place of death</dt><dd>{{ . }}</dd>{{ end }}
+        {{ if $p.incarcerated }}<dt>Note</dt><dd>Reported as incarcerated at time of death.</dd>{{ end }}
+        <dt>Source</dt>
+        <dd>
+          {{ if eq $p.sourceType "DGI_PR_DOCS" }}Department of Government Information
+          {{ else if eq $p.sourceType "VERIFIED_SUBMISSION" }}Verified family submission
+          {{ else }}Unrecorded{{ end }}
+          {{ with $p.sourceRef }}
+            &middot;
+            <a href="https://github.com/sl-c19-memorial/scraped-dgi-reports/blob/data/data/dig_reports/{{ . }}.md">reference</a>
+          {{ end }}
+        </dd>
+      </dl>
+
+      <p class="muted" style="margin-top:1rem">
+        Record <code>{{ $p.indexKey }}</code>. Displayed exactly as officially
+        recorded. If a detail is wrong, please
+        <a href="{{ "/approach/" | relURL }}">get in touch</a>.
+      </p>
+    </div>
+  </article>
+{{ end }}

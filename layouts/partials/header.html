@@ -1,0 +1,15 @@
+<header class="site-header">
+  <div class="container bar">
+    <a class="brand" href="{{ "/" | relURL }}">
+      <p class="brand-title">Sri Lanka</p>
+      <p class="brand-sub">COVID-19 Memorial</p>
+    </a>
+    <nav>
+      <ul class="site-nav">
+        {{ range site.Menus.main }}
+          <li><a href="{{ .URL | relURL }}">{{ .Name }}</a></li>
+        {{ end }}
+      </ul>
+    </nav>
+  </div>
+</header>

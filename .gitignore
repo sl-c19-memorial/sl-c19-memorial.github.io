@@ -1,0 +1,10 @@
+# Hugo
+/public/
+/resources/
+.hugo_build.lock
+
+# Node (data tooling only)
+node_modules/
+
+# OS
+.DS_Store

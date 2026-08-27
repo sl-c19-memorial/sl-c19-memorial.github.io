@@ -1,0 +1,26 @@
+{{ define "main" }}
+  {{ $people := where .Pages "Type" "people" }}
+  {{ if $people }}
+    {{ $people = sort $people "Params.deathDate" "desc" }}
+    <h1>{{ .Title }}</h1>
+    {{ with .Content }}<div class="prose">{{ . }}</div>{{ end }}
+    <p class="muted">{{ len $people }} people</p>
+    {{ $paged := .Paginate $people }}
+    <div class="grid">
+      {{ range $paged.Pages }}
+        {{ partial "person-cell.html" . }}
+      {{ end }}
+    </div>
+    {{ partial "pagination.html" . }}
+  {{ else }}
+    <h1>{{ .Title }}</h1>
+    <div class="prose">
+      {{ .Content }}
+      <ul>
+        {{ range .Pages }}
+          <li><a href="{{ .RelPermalink }}">{{ .Title }}</a></li>
+        {{ end }}
+      </ul>
+    </div>
+  {{ end }}
+{{ end }}
