@@ -227,10 +227,9 @@ node scripts/fetch-data.mjs && hugo --gc --minify
   hooks, no functions.
 - **Monthly snapshot tags.** `archive/2026-08` tags so the archive has
   addressable historical states.
-- **Forms, statically.** ✅ `/submit` links out to a Google Form
-  (`params.submitFormUrl`; fields spec in `docs/google-form-fields.md`);
-  `/contact` is a `mailto:` (`params.contactEmail`). No serverless code.
-  Remaining: create the actual Google Form and paste its link into config.
+- **Forms, statically.** ✅ Done. `/submit` and `/contact` each link out to a
+  Google Form (`params.submitFormUrl` / `params.contactFormUrl`); submission
+  fields spec in `docs/google-form-fields.md`. No serverless code.
 - **URL parity.** Redirect map from old Next.js routes (`/[slug]`, locale
   prefixes, any shared entry links) to the new scheme, as `aliases` or a host
   redirect file, so existing inbound links survive.
@@ -259,7 +258,7 @@ node scripts/fetch-data.mjs && hugo --gc --minify
 | Client-side filter widget | Pre-built facet pages + `/browse/` (+ optional GET form in Stage B) |
 | Hover card + click overlay | A real `/person/<slug>/` page |
 | Submission form (hCaptcha, ZeptoMail, Google Sheets) | `/submit` page → Google Form (`params.submitFormUrl`); fields in `docs/google-form-fields.md` |
-| Contact form | `/contact` page → `mailto:` (`params.contactEmail`) |
+| Contact form | `/contact` page → Google Form (`params.contactFormUrl`) |
 | Theme switcher | Dropped (was already disabled in the original) |
 | Google Analytics | Dropped (add privacy-friendly analytics later if wanted) |
 | Netlify functions + build hook | GitHub Actions cron + static deploy |

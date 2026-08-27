@@ -12,10 +12,9 @@ defaultContentLanguageInSubdir = false
 [params]
   description = "In memory of those we lost to COVID-19 in Sri Lanka."
   ogImage = "/share_img.png"
-  # Where the /submit page sends people. Replace with the real Google Form link.
+  # Google Forms the /submit and /contact pages send people to.
   submitFormUrl = "https://forms.gle/F36gsHCNPNggS8bf6"
-  # Shown on /contact as a mailto: link. Change if the address differs.
-  contactEmail = "info@srilankac19memorial.org"
+  contactFormUrl = "https://forms.gle/irLjT9dtAvXtey828"
 
 [pagination]
   pagerSize = 96

@@ -116,5 +116,5 @@ other = "Submit"
 other = "Contact"
 [submitOpenForm]
 other = "Open the submission form"
-[contactWriteTo]
-other = "Email us"
+[contactOpenForm]
+other = "Open the contact form"

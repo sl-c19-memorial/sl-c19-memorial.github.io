@@ -1,3 +1,2 @@
-{{- $email := site.Params.contactEmail -}}
-<p><a class="btn" href="mailto:{{ $email }}">{{ i18n "contactWriteTo" }}</a>
-<span class="footer-meta" style="margin-left:.5rem">{{ $email }}</span></p>
+{{- $url := site.Params.contactFormUrl -}}
+<p><a class="btn" href="{{ $url }}" target="_blank" rel="noopener">{{ i18n "contactOpenForm" }}</a></p>
