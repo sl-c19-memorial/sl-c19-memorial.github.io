@@ -109,3 +109,12 @@ other = "Browse"
 other = "About"
 ["menu.approach"]
 other = "Approach"
+
+["menu.submit"]
+other = "Submit"
+["menu.contact"]
+other = "Contact"
+[submitOpenForm]
+other = "Open the submission form"
+[contactWriteTo]
+other = "Email us"

@@ -109,3 +109,12 @@ other = "உலாවு"
 other = "எம்மைப் பற்றி"
 ["menu.approach"]
 other = "அணுகுமுறை"
+
+["menu.submit"]
+other = "சமர்ப்பணம்"
+["menu.contact"]
+other = "தொடர்புகளுக்கு"
+[submitOpenForm]
+other = "சமர்ப்பிப்புப் படிவத்தைத் திறக்கவும்"
+[contactWriteTo]
+other = "எங்களுக்கு மின்னஞ்சல் அனுப்புங்கள்"

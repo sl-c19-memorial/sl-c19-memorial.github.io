@@ -109,3 +109,12 @@ other = "සොයා බලන්න"
 other = "අප ගැන"
 ["menu.approach"]
 other = "ක්‍රමවේදය"
+
+["menu.submit"]
+other = "ගොනු කරන්න"
+["menu.contact"]
+other = "අමතන්න"
+[submitOpenForm]
+other = "ඉදිරිපත් කිරීමේ පෝරමය විවෘත කරන්න"
+[contactWriteTo]
+other = "අපට විද්‍යුත් තැපෑලක් එවන්න"
