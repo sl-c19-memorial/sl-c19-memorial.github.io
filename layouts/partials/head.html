@@ -37,3 +37,5 @@
 {{- with .OutputFormats.Get "rss" -}}
   <link rel="{{ .Rel }}" type="{{ .MediaType.Type }}" href="{{ .Permalink }}" title="{{ $title }}" />
 {{- end -}}
+
+{{- if hugo.IsProduction }}{{ template "_internal/google_analytics.html" . }}{{ end -}}

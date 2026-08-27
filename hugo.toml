@@ -9,6 +9,11 @@ defaultContentLanguageInSubdir = false
 # content/people/_content.gotmpl (which calls .EnableAllLanguages). No per-person
 # Markdown is committed.
 
+[services.googleAnalytics]
+  # GA4 property carried over from the old Next.js site (was NEXT_PUBLIC_GA_TRACKING_ID
+  # on Netlify). Emitted only in production builds by _internal/google_analytics.html.
+  ID = "G-GEZ96EYPEQ"
+
 [params]
   description = "In memory of those we lost to COVID-19 in Sri Lanka."
   ogImage = "/share_img.png"
