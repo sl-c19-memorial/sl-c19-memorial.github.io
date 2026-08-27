@@ -1,0 +1,17 @@
+{{- /*
+  dict: date (string or time), lang, style ("medium" default | "long")
+
+  EN and TA go through Hugo's locale-aware time.Format, which is correct for
+  them. Hugo's bundled si-LK locale data uses traditional lunar month names
+  (නිකිණි, වෙසක් …); for Sinhala we format the Gregorian date ourselves with
+  the standard Sinhala month names.
+*/ -}}
+{{- $t := time.AsTime .date -}}
+{{- $lang := .lang -}}
+{{- $style := .style | default "medium" -}}
+{{- if eq $lang "si" -}}
+  {{- $months := slice "ජනවාරි" "පෙබරවාරි" "මාර්තු" "අප්‍රේල්" "මැයි" "ජූනි" "ජූලි" "අගෝස්තු" "සැප්තැම්බර්" "ඔක්තෝබර්" "නොවැම්බර්" "දෙසැම්බර්" -}}
+  {{- printf "%d %s %d" $t.Day (index $months (sub (int $t.Month) 1)) $t.Year -}}
+{{- else -}}
+  {{- time.Format (cond (eq $style "long") ":date_long" ":date_medium") $t -}}
+{{- end -}}

@@ -21,7 +21,7 @@
         {{ with $p.ageValue }}{{ . }}{{ else }}{{ i18n "ageUnknown" }}{{ end }}{{ with $p.sex }}, {{ i18n (printf "sex.%s" .) }}{{ end }}
       </p>
       <p class="place">{{ or $cityLoc $districtLoc }}</p>
-      <p class="date">{{ with $p.deathDate }}{{ i18n "died" (dict "date" (time.Format ":date_long" .)) }}{{ end }}</p>
+      <p class="date">{{ with $p.deathDate }}{{ i18n "died" (dict "date" (partial "fmt-date.html" (dict "date" . "lang" $lang "style" "long"))) }}{{ end }}</p>
 
       {{ with $p.detail }}{{ with .description }}<p>{{ . }}</p>{{ end }}{{ end }}
 

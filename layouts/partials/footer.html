@@ -8,7 +8,7 @@
       <p class="footer-meta">
         {{ with $everyone }}<a href="{{ .RelPermalink }}">{{ i18n "everyoneDocumented" }}</a> &middot; {{ end }}
         {{ with $stats.documented }}{{ i18n "peopleDocumentedShort" (dict "count" .) }}{{ end }}
-        {{ with $stats.refreshedAt }} &middot; {{ i18n "dataRefreshed" (dict "date" (time.Format ":date_medium" .)) }}{{ end }}
+        {{ with $stats.refreshedAt }} &middot; {{ i18n "dataRefreshed" (dict "date" (partial "fmt-date.html" (dict "date" . "lang" site.Language.Lang "style" "medium"))) }}{{ end }}
       </p>
       <p class="footer-meta">{{ i18n "footerCopyright" }}</p>
     </div>

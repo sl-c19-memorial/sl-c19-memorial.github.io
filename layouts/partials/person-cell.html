@@ -13,5 +13,5 @@
     {{- with $p.ageValue }}{{ . }}{{ else }}{{ i18n "ageUnknown" }}{{ end }}{{ with $p.sex }}, {{ i18n (printf "sex.%s" .) }}{{ end -}}
   </span>
   <span class="place">{{ $placeLoc }}</span>
-  <span class="date">{{ with $p.deathDate }}{{ time.Format ":date_medium" . }}{{ end }}</span>
+  <span class="date">{{ with $p.deathDate }}{{ partial "fmt-date.html" (dict "date" . "lang" $lang "style" "medium") }}{{ end }}</span>
 </a>
