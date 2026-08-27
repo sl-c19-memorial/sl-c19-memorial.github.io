@@ -1,10 +1,11 @@
 {{ define "main" }}
-  <h1>Browse by {{ .Title | lower }}</h1>
+  {{ $facet := i18n (printf "facet.%s" .Data.Plural) }}
+  <h1>{{ i18n "browseBy" (dict "facet" $facet) }}</h1>
   <ul class="term-list">
     {{ range .Pages.ByTitle }}
       <li>
         <a href="{{ .RelPermalink }}">
-          <span>{{ .Title }}</span>
+          <span>{{ partial "term-label.html" . }}</span>
           <span class="count">{{ len .Pages }}</span>
         </a>
       </li>

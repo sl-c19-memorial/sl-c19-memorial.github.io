@@ -1,8 +1,5 @@
 ---
 title: "Approach"
-menu:
-  main:
-    weight: 30
 ---
 
 ## How we made this memorial

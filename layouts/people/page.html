@@ -1,62 +1,56 @@
 {{ define "main" }}
   {{ $p := .Params }}
-  {{ $flower := resources.Get "img/flower.png" }}
-  {{ $photo := "" }}
-  {{ with $p.detail }}{{ $photo = .photo }}{{ end }}
+  {{ $lang := .Site.Language.Lang }}
+  {{ $stats := hugo.Data.site_stats }}
+  {{ $home := .Site.Home }}
+  {{ $provinceLoc := partial "loc-place.html" (dict "kind" "provinces" "name" $p.province "lang" $lang) }}
+  {{ $districtLoc := partial "loc-place.html" (dict "kind" "districts" "name" $p.district "lang" $lang) }}
+  {{ $cityLoc := partial "loc-place.html" (dict "kind" "cities" "name" $p.city "lang" $lang) }}
 
-  <p class="muted"><a href="{{ "/" | relURL }}">&larr; All {{ len (where site.RegularPages "Type" "people") }} people</a></p>
+  <p class="footer-meta">
+    <a href="{{ $home.RelPermalink }}">&larr; {{ i18n "allPeopleBack" (dict "count" $stats.documented) }}</a>
+  </p>
 
   <article class="card">
     <div class="card-body person">
-      {{ if $p.personName }}<h1>{{ $p.personName }}</h1>{{ else }}<h1>Name unknown</h1>{{ end }}
+      {{ with $p.personName }}<h1>{{ . }}</h1>{{ else }}<h1>{{ i18n "nameUnknown" }}</h1>{{ end }}
 
-      {{ if $photo }}
-        <img class="flower photo" src="{{ $photo }}" width="160" height="160" alt="" />
-      {{ else }}
-        <img class="flower" src="{{ $flower.RelPermalink }}" width="160" height="160" alt="A flower representing one person" />
-      {{ end }}
+      {{ partial "portrait.html" (dict "params" $p "size" 160) }}
 
       <p class="age">
-        {{ with $p.ageValue }}{{ . }}{{ else }}Age unknown{{ end }}{{ with $p.sex }}, {{ . }}{{ end }}
+        {{ with $p.ageValue }}{{ . }}{{ else }}{{ i18n "ageUnknown" }}{{ end }}{{ with $p.sex }}, {{ i18n (printf "sex.%s" .) }}{{ end }}
       </p>
-      <p class="place">
-        {{ with $p.city }}{{ . }}{{ else }}{{ $p.district }}{{ end }}
-      </p>
-      <p class="date">
-        {{ with $p.deathDate }}Died {{ dateFormat "2 January 2006" . }}{{ end }}
-      </p>
+      <p class="place">{{ or $cityLoc $districtLoc }}</p>
+      <p class="date">{{ with $p.deathDate }}{{ i18n "died" (dict "date" (time.Format ":date_long" .)) }}{{ end }}</p>
 
-      {{ with $p.detail }}
-        {{ with .description }}<p>{{ . }}</p>{{ end }}
-      {{ end }}
+      {{ with $p.detail }}{{ with .description }}<p>{{ . }}</p>{{ end }}{{ end }}
 
       <dl>
         {{ with $p.detail }}{{ with .occupation }}
-          <dt>Occupation</dt><dd>{{ . }}</dd>
+          <dt>{{ i18n "fldOccupation" }}</dt><dd>{{ . }}</dd>
         {{ end }}{{ end }}
-        <dt>Province</dt>
-        <dd><a href="{{ (printf "/provinces/%s/" (urlize $p.province)) | relURL }}">{{ $p.province }}</a></dd>
-        <dt>District</dt>
-        <dd><a href="{{ (printf "/districts/%s/" (urlize $p.district)) | relURL }}">{{ $p.district }}</a></dd>
-        {{ with $p.city }}<dt>City</dt><dd>{{ . }}</dd>{{ end }}
-        {{ with $p.deathPlace }}<dt>Place of death</dt><dd>{{ . }}</dd>{{ end }}
-        {{ if $p.incarcerated }}<dt>Note</dt><dd>Reported as incarcerated at time of death.</dd>{{ end }}
-        <dt>Source</dt>
+        <dt>{{ i18n "fldProvince" }}</dt>
+        <dd><a href="{{ (printf "/provinces/%s/" (urlize $p.province)) | relLangURL }}">{{ $provinceLoc }}</a></dd>
+        <dt>{{ i18n "fldDistrict" }}</dt>
+        <dd><a href="{{ (printf "/districts/%s/" (urlize $p.district)) | relLangURL }}">{{ $districtLoc }}</a></dd>
+        {{ with $p.city }}<dt>{{ i18n "fldCity" }}</dt><dd>{{ $cityLoc }}</dd>{{ end }}
+        {{ with $p.deathPlace }}<dt>{{ i18n "fldPlaceOfDeath" }}</dt><dd>{{ . }}</dd>{{ end }}
+        {{ if $p.incarcerated }}<dt>{{ i18n "fldNote" }}</dt><dd>{{ i18n "incarceratedNote" }}</dd>{{ end }}
+        <dt>{{ i18n "fldSource" }}</dt>
         <dd>
-          {{ if eq $p.sourceType "DGI_PR_DOCS" }}Department of Government Information
-          {{ else if eq $p.sourceType "VERIFIED_SUBMISSION" }}Verified family submission
-          {{ else }}Unrecorded{{ end }}
+          {{ if eq $p.sourceType "DGI_PR_DOCS" }}{{ i18n "srcDgi" }}
+          {{ else if eq $p.sourceType "VERIFIED_SUBMISSION" }}{{ i18n "srcSubmission" }}
+          {{ else }}{{ i18n "srcUnrecorded" }}{{ end }}
           {{ with $p.sourceRef }}
             &middot;
-            <a href="https://github.com/sl-c19-memorial/scraped-dgi-reports/blob/data/data/dig_reports/{{ . }}.md">reference</a>
+            <a href="https://github.com/sl-c19-memorial/scraped-dgi-reports/blob/data/data/dig_reports/{{ . }}.md">{{ i18n "srcReference" }}</a>
           {{ end }}
         </dd>
       </dl>
 
-      <p class="muted" style="margin-top:1rem">
-        Record <code>{{ $p.indexKey }}</code>. Displayed exactly as officially
-        recorded. If a detail is wrong, please
-        <a href="{{ "/approach/" | relURL }}">get in touch</a>.
+      <p class="footer-meta record-note">
+        {{ i18n "recordNote" (dict "key" $p.indexKey) }}
+        {{ i18n "getInTouch" }}
       </p>
     </div>
   </article>

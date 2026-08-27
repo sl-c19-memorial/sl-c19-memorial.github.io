@@ -1,18 +1,16 @@
 baseURL = "https://srilankac19memorial.org/"
-# languageCode moved under [languages] in Stage C; single-language for now
 title = "Sri Lanka COVID-19 Memorial"
 enableRobotsTXT = true
 
-# Stage A is English-only plain HTML. Sinhala / Tamil are added in Stage C
-# (see PROJECT_PLAN.md) via Hugo's native multilingual mode.
 defaultContentLanguage = "en"
+defaultContentLanguageInSubdir = false
 
-# Documented people are generated at build time from data/covid19_deaths.json
-# by content/people/_content.gotmpl -- no per-person Markdown files are committed.
+# People pages are generated at build time from data/covid19_deaths.json by
+# content/people/_content.gotmpl (which calls .EnableAllLanguages). No per-person
+# Markdown is committed.
+
 [params]
   description = "In memory of those we lost to COVID-19 in Sri Lanka."
-  # These two numbers are refreshed by scripts/fetch-data.mjs into
-  # data/site_stats.json and surfaced here through layouts.
   ogImage = "/share_img.png"
 
 [pagination]
@@ -34,8 +32,48 @@ defaultContentLanguage = "en"
   section = ["HTML"]
 
 [minify]
-  disableJSON = false
   minifyOutput = true
 
 [permalinks]
   people = "/person/:slug/"
+
+# Menu structure is language-neutral; labels come from i18n/<lang>.toml keyed
+# by identifier (menu.browse / menu.about / menu.approach). pageRef resolves
+# per language automatically. "Everyone documented" is deliberately not here —
+# the home page already is that list.
+[[menu.main]]
+  identifier = "browse"
+  pageRef = "/browse"
+  weight = 10
+[[menu.main]]
+  identifier = "about"
+  pageRef = "/about"
+  weight = 20
+[[menu.main]]
+  identifier = "approach"
+  pageRef = "/approach"
+  weight = 30
+
+# English at /, Sinhala at /si/, Tamil at /ta/ (matching the original site).
+# Prose: content/<name>.<lang>.md. UI strings: i18n/<lang>.toml. Place names:
+# data/geo.json at render time.
+[languages.en]
+  label = "English"
+  locale = "en-LK"
+  weight = 1
+  [languages.en.params]
+    description = "In memory of those we lost to COVID-19 in Sri Lanka."
+
+[languages.si]
+  label = "සිංහල"
+  locale = "si-LK"
+  weight = 2
+  [languages.si.params]
+    description = "ශ්‍රී ලංකාවේ කෝවිඩ්-19 නිසා මිය ගිය පුද්ගලයින් සිහි කිරීම පිණිස"
+
+[languages.ta]
+  label = "தமிழ்"
+  locale = "ta-LK"
+  weight = 3
+  [languages.ta.params]
+    description = "இலங்கையில் கோவிட்-19 இனால் உயிரிழந்தவர்களை நினைவுகூரும் வகையில்"

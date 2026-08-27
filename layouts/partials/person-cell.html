@@ -1,20 +1,17 @@
 {{- /* Expects a person Page as the context. */ -}}
 {{- $p := .Params -}}
-{{- $flower := resources.Get "img/flower.png" -}}
-{{- $photo := "" -}}
-{{- with $p.detail }}{{ $photo = .photo }}{{ end -}}
+{{- $lang := .Site.Language.Lang -}}
+{{- $place := or $p.city $p.district -}}
+{{- $placeKind := cond (ne (string $p.city) "") "cities" "districts" -}}
+{{- $placeLoc := partial "loc-place.html" (dict "kind" $placeKind "name" $place "lang" $lang) -}}
 <a class="cell" href="{{ .RelPermalink }}">
   <span class="name">
-    {{- if $p.personName }}{{ $p.personName }}{{ else }}Name unknown{{ end -}}
+    {{- with $p.personName }}{{ . }}{{ else }}{{ i18n "nameUnknown" }}{{ end -}}
   </span>
-  {{ if $photo }}
-    <img class="flower photo" src="{{ $photo }}" width="96" height="96" loading="lazy" alt="" />
-  {{ else }}
-    <img class="flower" src="{{ $flower.RelPermalink }}" width="96" height="96" loading="lazy" alt="A flower representing one person" />
-  {{ end }}
+  {{ partial "portrait.html" (dict "params" $p "size" 96) }}
   <span class="age">
-    {{- with $p.ageValue }}{{ . }}{{ else }}Age unknown{{ end }}{{ with $p.sex }}, {{ . }}{{ end -}}
+    {{- with $p.ageValue }}{{ . }}{{ else }}{{ i18n "ageUnknown" }}{{ end }}{{ with $p.sex }}, {{ i18n (printf "sex.%s" .) }}{{ end -}}
   </span>
-  <span class="place">{{ with $p.city }}{{ . }}{{ else }}{{ $p.district }}{{ end }}</span>
-  <span class="date">{{ with $p.deathDate }}{{ dateFormat "2 Jan 2006" . }}{{ end }}</span>
+  <span class="place">{{ $placeLoc }}</span>
+  <span class="date">{{ with $p.deathDate }}{{ time.Format ":date_medium" . }}{{ end }}</span>
 </a>

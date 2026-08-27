@@ -1,12 +1,15 @@
 {{/*
-  Content adapter: generate one page per documented person from
-  data/covid19_deaths.json. No Markdown files are committed for people.
-  Permalink is /person/<indexKey>/ (see [permalinks] in hugo.toml).
+  Content adapter: one page per documented person, generated from
+  data/covid19_deaths.json for every language (.EnableAllLanguages).
+  No per-person Markdown is committed. Permalink: /person/<slug>/ .
+  Place names are stored in English here and localised at render time
+  from data/geo.json (see partials/loc-place.html).
 */}}
+{{ .EnableAllLanguages }}
+
 {{ $people := hugo.Data.covid19_deaths }}
 
 {{ range $person := $people }}
-  {{ $key := $person.indexKey }}
   {{ $slug := or $person.slug $person.indexKey }}
 
   {{/* Age band mirrors the filter buckets from the original site. */}}
@@ -26,13 +29,13 @@
   {{ $sex := or $person.gender "Unknown" }}
   {{ $src := or $person.sourceType "UNRECORDED" }}
   {{ $place := or $person.city $person.district $person.province "Sri Lanka" }}
-  {{ $ageLabel := cond (ne $ageStr "") (printf "Age %s" $ageStr) "Age unknown" }}
 
   {{ $name := "" }}
   {{ with $person.detail }}{{ $name = or .name "" }}{{ end }}
+  {{ $title := or $name (printf "%s · %s" (or $ageStr "?") $place) }}
 
   {{ $params := dict
-    "indexKey" $key
+    "indexKey" $person.indexKey
     "deathDate" $person.deathDate
     "province" (or $person.province "")
     "district" (or $person.district "")
@@ -46,7 +49,6 @@
     "sourceType" $src
     "sourceRef" (or $person.sourceRef "")
     "personName" $name
-    "hasDetail" (ne $name "")
     "detail" $person.detail
     "provinces" (slice (or $person.province "Unrecorded"))
     "districts" (slice (or $person.district "Unrecorded"))
@@ -60,7 +62,7 @@
     "kind" "page"
     "path" $slug
     "slug" $slug
-    "title" (printf "%s, %s — %s" $ageLabel $sex $place)
+    "title" $title
     "params" $params
     "dates" (dict "date" (time.AsTime $person.deathDate))
     "content" (dict "mediaType" "text/markdown" "value" "")

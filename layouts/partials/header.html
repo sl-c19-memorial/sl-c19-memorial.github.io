@@ -1,15 +1,23 @@
 <header class="site-header">
   <div class="container bar">
-    <a class="brand" href="{{ "/" | relURL }}">
-      <p class="brand-title">Sri Lanka</p>
-      <p class="brand-sub">COVID-19 Memorial</p>
+    <a class="brand" href="{{ .Site.Home.RelPermalink }}">
+      <span class="brand-title">{{ i18n "brandLine1" }}</span>
+      <span class="brand-sub">{{ i18n "brandLine2" }}</span>
     </a>
-    <nav>
-      <ul class="site-nav">
-        {{ range site.Menus.main }}
-          <li><a href="{{ .URL | relURL }}">{{ .Name }}</a></li>
-        {{ end }}
-      </ul>
+
+    <nav class="site-nav" aria-label="Primary">
+      {{ range .Site.Menus.main }}
+        {{ $label := or .Name (i18n (printf "menu.%s" .Identifier)) }}
+        <a href="{{ .URL }}"{{ if $.IsMenuCurrent "main" . }} aria-current="page"{{ end }}>{{ $label }}</a>
+      {{ end }}
     </nav>
+
+    <ul class="lang-switch" aria-label="Language">
+      {{ range .AllTranslations }}
+        <li{{ if eq .Language.Lang $.Site.Language.Lang }} class="current" aria-current="true"{{ end }}>
+          <a href="{{ .RelPermalink }}" hreflang="{{ .Language.Lang }}" lang="{{ .Language.Lang }}">{{ .Language.Label }}</a>
+        </li>
+      {{ end }}
+    </ul>
   </div>
 </header>

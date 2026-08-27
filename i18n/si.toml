@@ -1,0 +1,111 @@
+[brandLine1]
+other = "ශ්‍රී ලංකාව"
+[brandLine2]
+other = "කෝවිඩ්-19 අනුස්මරණ ස්මාරකය"
+
+[headline]
+other = "කෝවිඩ්-19 වසංගතය හේතුවෙන් ශ්‍රී ලංකාවේ පුද්ගලයින් {{ .count }} ක් මියගොස් තිබේ"
+
+[peopleDocumentedShort]
+other = "පුද්ගලයින් {{ .count }} දෙනෙකු ලේඛනගත කර ඇත"
+[dataRefreshed]
+other = "දත්ත යාවත්කාලීන කළේ {{ .date }}"
+
+[everyoneDocumented]
+other = "ලේඛනගත කළ සියල්ලෝ"
+[allPeopleBack]
+other = "පුද්ගලයින් {{ .count }} දෙනා"
+[peopleDocumented]
+other = "පුද්ගලයින් {{ .count }} දෙනෙකු ලේඛනගත කර ඇත"
+
+[browseBy]
+other = "{{ .facet }} අනුව සොයා බලන්න"
+[backToFacet]
+other = "සියලු {{ .facet }}"
+[pagerNewer]
+other = "අලුත්"
+[pagerOlder]
+other = "පැරණි"
+
+[died]
+other = "මියගියේ {{ .date }}"
+[ageUnknown]
+other = "වයස නොදන්නා"
+[nameUnknown]
+other = "නම නොදන්නා"
+
+[fldProvince]
+other = "පළාත"
+[fldDistrict]
+other = "දිස්ත්‍රික්කය"
+[fldCity]
+other = "නගරය"
+[fldPlaceOfDeath]
+other = "මියගිය ස්ථානය"
+[fldOccupation]
+other = "රැකියාව"
+[fldSource]
+other = "මූලාශ්‍රය"
+[fldNote]
+other = "සටහන"
+
+[srcDgi]
+other = "රජයේ ප්‍රවෘත්ති දෙපාර්තමේන්තුව"
+[srcSubmission]
+other = "සත්‍යාපිත පවුලේ ඉදිරිපත් කිරීම"
+[srcUnrecorded]
+other = "සටහන් වී නැත"
+[srcReference]
+other = "මූලාශ්‍රය"
+[incarceratedNote]
+other = "මියයන විට සිරගතව සිටි බව වාර්තා විය."
+[recordNote]
+other = "වාර්තාව {{ .key }}. රජයේ වාර්තා අනුව දක්වා ඇත."
+[getInTouch]
+other = "යම් තොරතුරක් වැරදි නම්, කරුණාකර අප අමතන්න."
+
+["sex.Male"]
+other = "පිරිමි"
+["sex.Female"]
+other = "ගැහැණු"
+["sex.Unknown"]
+other = "ලිංගිකභාවය සටහන් වී නැත"
+
+["band.below-30"]
+other = "අවුරුදු 30 ට අඩු"
+["band.30-59"]
+other = "අවුරුදු 30 ත් 59 ත් අතර"
+["band.60-and-above"]
+other = "අවුරුදු 60 සහ ඊට වැඩි"
+
+["facet.provinces"]
+other = "පළාත"
+["facet.districts"]
+other = "දිස්ත්‍රික්කය"
+["facet.years"]
+other = "මියගිය වර්ෂය"
+["facet.sexes"]
+other = "ලිංගිකභාවය"
+["facet.agebands"]
+other = "වයස් පරාසය"
+["facet.sources"]
+other = "මූලාශ්‍රය"
+
+[footerTagline]
+other = "ශ්‍රී ලංකාවේ කෝවිඩ්-19 නිසා මිය ගිය පුද්ගලයින් සිහි කිරීම පිණිස."
+[footerSources]
+other = "මූලාශ්‍ර දත්ත"
+[footerCopyright]
+other = "විවෘත දත්ත සහ මෘදුකාංගය එම්අයිටී බලපත්‍රය යටතේ."
+
+[notFoundTitle]
+other = "පිටුව හමු නොවීය"
+[notFoundBody]
+other = "එම පිටුව නොමැත. මෙම ලේඛනාගාරයේ පුද්ගලයින් පළාත, වර්ෂය, වයස හෝ ලිංගිකභාවය අනුව සොයා බැලිය හැක."
+
+["menu.browse"]
+other = "සොයා බලන්න"
+["menu.about"]
+other = "අප ගැන"
+["menu.approach"]
+other = "ක්‍රමවේදය"

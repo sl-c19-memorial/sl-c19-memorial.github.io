@@ -1,23 +1,27 @@
 # Sri Lanka COVID-19 Memorial — static archive
 
-A self-contained [Hugo](https://gohugo.io) rebuild of
+A fully self-contained [Hugo](https://gohugo.io) rebuild of
 [srilankac19memorial.org](https://srilankac19memorial.org), designed to run as a
 **living archive** with no application server, no build hooks, and no hosted
 services to maintain.
 
-The original site (`memorial-web`, Next.js on Netlify) rendered the same data but
-needed a Node runtime, Netlify functions for form handling, and a daily deploy
-hook. This repo replaces all of that with plain pre-rendered HTML.
+The original site (`memorial-web`, Next.js on Netlify) needed a Node runtime,
+Netlify functions for form handling, and a daily deploy hook. This repo replaces
+all of that with plain pre-rendered HTML in English, Sinhala and Tamil. The
+source repositories are now archived; everything needed to build and serve the
+memorial — data, submitted photos, geo lookup, styling — lives here.
 
 ## What's in here (monolithic by design)
 
 | Path | What it is |
 | --- | --- |
-| `data/` | Committed snapshot of the dataset. `covid19_deaths.json`, `geo.json`, `site_stats.json`. |
-| `scripts/fetch-data.mjs` | The only networked step. Pulls the latest upstream snapshots into `data/`. |
-| `content/` | Prose pages (`about`, `approach`) + `people/_content.gotmpl`, the [content adapter](https://gohugo.io/content-management/content-adapters/) that generates one page per documented person from `data/covid19_deaths.json`. |
-| `layouts/` | Templates. Palette and shapes ported from the original DaisyUI theme. |
-| `assets/` | `css/main.css` and the flower image, run through Hugo's asset pipeline. |
+| `data/` | Committed dataset snapshot: `covid19_deaths.json`, `geo.json` (place names in en/si/ta), `site_stats.json`. |
+| `assets/people/` | Vendored submission photos, referenced from `covid19_deaths.json` by local path. |
+| `scripts/fetch-data.mjs` | The only networked step. Refreshes `data/` and re-vendors photos from the (archived) upstream repos. |
+| `content/` | Prose (`about`, `approach`, home intro) as `*.md` / `*.si.md` / `*.ta.md`, plus `people/_content.gotmpl` — the [content adapter](https://gohugo.io/content-management/content-adapters/) that generates one page per documented person, in every language, from data. |
+| `i18n/` | UI strings per language. |
+| `layouts/` | Templates. Palette and shapes ported from the original DaisyUI theme; place names localised at render time from `data/geo.json`. |
+| `static/CNAME` | `srilankac19memorial.org` for GitHub Pages. |
 | `.github/workflows/` | `refresh-data.yml` (daily data pull + commit) and `build.yml` (Hugo build + GitHub Pages deploy). |
 
 No per-person Markdown files are committed — people pages exist only as data plus
@@ -28,18 +32,30 @@ a template, and are materialised at build time.
 Prerequisites: **Hugo extended ≥ 0.161** and **Node ≥ 20**.
 
 ```sh
-node scripts/fetch-data.mjs   # refresh data/ from upstream (optional; a snapshot is committed)
+node scripts/fetch-data.mjs   # refresh data/ + assets/people/ (a snapshot is already committed)
 hugo server                   # http://localhost:1313
 hugo --gc --minify            # production build into ./public
 ```
+
+## Languages
+
+English at `/`, Sinhala at `/si/`, Tamil at `/ta/` (matching the original).
+UI strings live in `i18n/<lang>.toml`; prose in `content/<name>.<lang>.md`;
+place names come from `data/geo.json`. Person records themselves (free-text
+fields like place of death) are shown as recorded, in their original language.
+
+> The UI strings carried over from the original site are the maintainers'
+> translations. Strings newly authored for this rebuild (pager, facet labels,
+> age bands, a few notes) would benefit from a native review — they are all in
+> `i18n/si.toml` and `i18n/ta.toml`.
 
 ## URL scheme
 
 | Route | Page |
 | --- | --- |
-| `/` | Flower grid of everyone documented, newest first, paginated |
+| `/` (`/si/`, `/ta/`) | Flower grid of everyone documented, newest first, paginated |
 | `/person/<indexKey>/` | One person |
-| `/people/` | Full list (same grid) |
+| `/people/` | Full list (same grid) — linked from the footer, not the top nav |
 | `/browse/` | Every drill-down facet with counts |
 | `/provinces/<name>/`, `/districts/<name>/` | People from a place |
 | `/years/<yyyy>/` | People who died that year |
@@ -47,10 +63,10 @@ hugo --gc --minify            # production build into ./public
 
 ## Data provenance
 
-Upstream, unchanged, still maintained in their own repos:
+Upstream (now **archived**, read-only):
 
-- [`sl-c19-memorial/memorial-dataset`](https://github.com/sl-c19-memorial/memorial-dataset) — manually documented deaths + the geo lookup table
-- [`sl-c19-memorial/scraped-dgi-reports`](https://github.com/sl-c19-memorial/scraped-dgi-reports) — scraped Department of Government Information press releases (wired in at Stage C)
+- [`sl-c19-memorial/memorial-dataset`](https://github.com/sl-c19-memorial/memorial-dataset) — documented deaths, geo lookup, submission photos
+- [`sl-c19-memorial/scraped-dgi-reports`](https://github.com/sl-c19-memorial/scraped-dgi-reports) — scraped DGI press releases (each person's source line still links here for citation)
 
 `fetch-data.mjs` normalises a few malformed `indexKey` values from the source
 (stray spaces, `*`) into clean URL slugs while keeping the original key visible on
@@ -58,8 +74,9 @@ each person page.
 
 ## Status
 
-Stage A (static site + data integration) is complete. See
-[`PROJECT_PLAN.md`](PROJECT_PLAN.md) for the roadmap.
+Stage A (static site + data integration) and the Stage C language + self-
+containment work are complete. See [`PROJECT_PLAN.md`](PROJECT_PLAN.md) for the
+rest of the roadmap.
 
 ## Licence
 

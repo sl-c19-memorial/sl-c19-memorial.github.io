@@ -1,0 +1,10 @@
+{{- /* Build once (via partialCached): kind -> English name -> geo record. */ -}}
+{{- $out := dict -}}
+{{- range $kind, $list := hugo.Data.geo -}}
+  {{- $m := dict -}}
+  {{- range $list -}}
+    {{- $m = merge $m (dict .name_en .) -}}
+  {{- end -}}
+  {{- $out = merge $out (dict $kind $m) -}}
+{{- end -}}
+{{- return $out -}}

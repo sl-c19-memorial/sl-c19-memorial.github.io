@@ -2,28 +2,33 @@
 /**
  * fetch-data.mjs
  *
- * Pulls the latest upstream snapshots into ./data so the site can be built
- * fully offline. This is the ONLY network step in the whole project; running
- * `hugo` afterwards needs nothing but the files in this repo.
+ * Pulls the upstream dataset into this repo and vendors every asset it
+ * references, so the site is fully self-contained. After this runs, building
+ * with `hugo` needs nothing from the network and nothing from the (now
+ * archived) source repositories.
  *
- * Upstream sources (all published on the `data` branch of their repos):
- *   - sl-c19-memorial/memorial-dataset   -> manually documented deaths + geo table
- *   - sl-c19-memorial/scraped-dgi-reports -> DGI press-release archive (Stage C)
+ * Historic upstream (read-only archives):
+ *   - sl-c19-memorial/memorial-dataset    documented deaths + geo table + photos
+ *   - sl-c19-memorial/scraped-dgi-reports  DGI press-release archive
  *
  * Usage:  node scripts/fetch-data.mjs
  *
  * Writes:
- *   data/covid19_deaths.json  raw documented-death records (newest first)
- *   data/geo.json             provinces / districts / cities with en|si|ta names
- *   data/site_stats.json      headline counters used across the layouts
+ *   data/covid19_deaths.json   documented-death records, newest first,
+ *                              slug-normalised, submitted photos rewritten to
+ *                              local paths under assets/people/
+ *   data/geo.json              provinces / districts / cities with en|si|ta names
+ *   data/site_stats.json       headline counters used across the layouts
+ *   assets/people/<slug>.jpg   vendored submission photos
  */
 
-import { writeFile } from "node:fs/promises";
+import { writeFile, mkdir, readdir, rm } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const DATA = path.join(ROOT, "data");
+const PHOTOS = path.join(ROOT, "assets", "people");
 
 const RAW = "https://raw.githubusercontent.com/sl-c19-memorial";
 const SOURCES = {
@@ -36,6 +41,12 @@ async function getJSON(url) {
   const res = await fetch(url, { headers: { "user-agent": "memorial-static/fetch-data" } });
   if (!res.ok) throw new Error(`GET ${url} -> ${res.status} ${res.statusText}`);
   return res.json();
+}
+
+async function getBinary(url) {
+  const res = await fetch(url, { headers: { "user-agent": "memorial-static/fetch-data" } });
+  if (!res.ok) throw new Error(`GET ${url} -> ${res.status} ${res.statusText}`);
+  return Buffer.from(await res.arrayBuffer());
 }
 
 async function main() {
@@ -69,6 +80,30 @@ async function main() {
     );
   }
 
+  // Vendor submitted photos. Rewrite detail.photo to a repo-local asset path
+  // (relative to assets/) and drop the remote URL entirely.
+  await rm(PHOTOS, { recursive: true, force: true });
+  await mkdir(PHOTOS, { recursive: true });
+  let vendored = 0;
+  for (const r of ordered) {
+    const remote = r.detail && r.detail.photo;
+    if (!remote) {
+      if (r.detail) r.detail.photo = null;
+      continue;
+    }
+    const ext = (path.extname(new URL(remote).pathname) || ".jpg").toLowerCase();
+    const file = `${r.slug}${ext}`;
+    try {
+      const bytes = await getBinary(remote);
+      await writeFile(path.join(PHOTOS, file), bytes);
+      r.detail.photo = `people/${file}`;
+      vendored += 1;
+    } catch (err) {
+      console.warn(`  photo for ${r.indexKey} failed (${err.message}); falling back to flower`);
+      r.detail.photo = null;
+    }
+  }
+
   // keys is the cumulative-deaths time series; its tail is the official toll.
   const lastKey = keys[keys.length - 1] ?? {};
 
@@ -91,9 +126,11 @@ async function main() {
   await writeFile(path.join(DATA, "geo.json"), JSON.stringify(geo, null, 2) + "\n");
   await writeFile(path.join(DATA, "site_stats.json"), JSON.stringify(stats, null, 2) + "\n");
 
+  const kept = (await readdir(PHOTOS)).length;
   console.log(
     `Wrote ${stats.documented} documented records ` +
-      `(official toll ${stats.cumDeaths} as of ${stats.cumDeathsAsOf}).`,
+      `(official toll ${stats.cumDeaths} as of ${stats.cumDeathsAsOf}); ` +
+      `vendored ${vendored} photo(s), ${kept} on disk.`,
   );
 }
 

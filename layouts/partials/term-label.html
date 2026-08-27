@@ -1,0 +1,17 @@
+{{- /* Context: a taxonomy term page. Returns a localised display label. */ -}}
+{{- $lang := .Site.Language.Lang -}}
+{{- $tax := .Data.Plural -}}
+{{- $term := .Data.Term -}}
+{{- $label := .Title -}}
+{{- if or (eq $tax "provinces") (eq $tax "districts") -}}
+  {{- $label = partial "loc-place.html" (dict "kind" $tax "name" .Title "lang" $lang) -}}
+{{- else if eq $tax "sexes" -}}
+  {{- $label = i18n (printf "sex.%s" $term) -}}
+{{- else if eq $tax "agebands" -}}
+  {{- $label = i18n (printf "band.%s" $term) -}}
+{{- else if eq $tax "sources" -}}
+  {{- if eq $term "DGI_PR_DOCS" -}}{{- $label = i18n "srcDgi" -}}
+  {{- else if eq $term "VERIFIED_SUBMISSION" -}}{{- $label = i18n "srcSubmission" -}}
+  {{- else -}}{{- $label = i18n "srcUnrecorded" -}}{{- end -}}
+{{- end -}}
+{{- $label -}}

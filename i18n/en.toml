@@ -1,0 +1,111 @@
+[brandLine1]
+other = "Sri Lanka"
+[brandLine2]
+other = "COVID-19 Memorial"
+
+[headline]
+other = "{{ .count }} people have died due to COVID-19 in Sri Lanka"
+
+[peopleDocumentedShort]
+other = "{{ .count }} people documented"
+[dataRefreshed]
+other = "data refreshed {{ .date }}"
+
+[everyoneDocumented]
+other = "Everyone documented"
+[allPeopleBack]
+other = "All {{ .count }} people"
+[peopleDocumented]
+other = "{{ .count }} people documented"
+
+[browseBy]
+other = "Browse by {{ .facet }}"
+[backToFacet]
+other = "All {{ .facet }}"
+[pagerNewer]
+other = "Newer"
+[pagerOlder]
+other = "Older"
+
+[died]
+other = "Died {{ .date }}"
+[ageUnknown]
+other = "Age unknown"
+[nameUnknown]
+other = "Name unknown"
+
+[fldProvince]
+other = "Province"
+[fldDistrict]
+other = "District"
+[fldCity]
+other = "City"
+[fldPlaceOfDeath]
+other = "Place of death"
+[fldOccupation]
+other = "Occupation"
+[fldSource]
+other = "Source"
+[fldNote]
+other = "Note"
+
+[srcDgi]
+other = "Department of Government Information"
+[srcSubmission]
+other = "Verified family submission"
+[srcUnrecorded]
+other = "Unrecorded"
+[srcReference]
+other = "reference"
+[incarceratedNote]
+other = "Reported as incarcerated at time of death."
+[recordNote]
+other = "Record {{ .key }}. Displayed as officially recorded."
+[getInTouch]
+other = "If a detail is wrong, please get in touch."
+
+["sex.Male"]
+other = "Male"
+["sex.Female"]
+other = "Female"
+["sex.Unknown"]
+other = "Sex unrecorded"
+
+["band.below-30"]
+other = "Under 30"
+["band.30-59"]
+other = "30 to 59"
+["band.60-and-above"]
+other = "60 and above"
+
+["facet.provinces"]
+other = "Province"
+["facet.districts"]
+other = "District"
+["facet.years"]
+other = "Year of death"
+["facet.sexes"]
+other = "Sex"
+["facet.agebands"]
+other = "Age band"
+["facet.sources"]
+other = "Source"
+
+[footerTagline]
+other = "In memory of those we lost to COVID-19 in Sri Lanka."
+[footerSources]
+other = "Source data"
+[footerCopyright]
+other = "Open data and source under the MIT licence."
+
+[notFoundTitle]
+other = "Page not found"
+[notFoundBody]
+other = "That page isn't here. The people documented in this archive can be browsed by province, year, age or sex."
+
+["menu.browse"]
+other = "Browse"
+["menu.about"]
+other = "About"
+["menu.approach"]
+other = "Approach"

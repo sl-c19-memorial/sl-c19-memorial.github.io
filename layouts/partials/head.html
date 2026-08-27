@@ -2,17 +2,22 @@
 {{- if and .Title (ne .Title site.Title) -}}
   {{- $title = printf "%s — %s" .Title site.Title -}}
 {{- end -}}
+{{- $desc := .Description | default site.Params.description -}}
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>{{ $title }}</title>
-<meta name="description" content="{{ site.Params.description }}" />
+<meta name="description" content="{{ $desc }}" />
 
 <meta property="og:type" content="website" />
 <meta property="og:title" content="{{ $title }}" />
-<meta property="og:description" content="{{ site.Params.description }}" />
+<meta property="og:description" content="{{ $desc }}" />
 <meta property="og:url" content="{{ .Permalink }}" />
 <meta property="og:image" content="{{ site.Params.ogImage | absURL }}" />
 <meta name="twitter:card" content="summary_large_image" />
+
+{{- range .AllTranslations }}
+  <link rel="alternate" hreflang="{{ .Language.Lang }}" href="{{ .Permalink }}" />
+{{- end }}
 
 <link rel="icon" href="{{ "favicon.ico" | relURL }}" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />

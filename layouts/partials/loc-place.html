@@ -1,0 +1,12 @@
+{{- /* dict: kind (provinces|districts|cities), name (English), lang */ -}}
+{{- $kind := .kind -}}
+{{- $name := .name -}}
+{{- $lang := .lang -}}
+{{- $out := $name -}}
+{{- if and $name (ne $lang "en") -}}
+  {{- $maps := partialCached "geo-maps.html" . -}}
+  {{- with index $maps $kind $name -}}
+    {{- with (index . (printf "name_%s" $lang)) -}}{{- $out = . -}}{{- end -}}
+  {{- end -}}
+{{- end -}}
+{{- $out -}}

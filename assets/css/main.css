@@ -84,36 +84,40 @@ img {
 
 .site-header .bar {
   display: flex;
-  align-items: center;
-  gap: 1rem;
-  padding-block: 1rem 0.75rem;
+  align-items: baseline;
+  column-gap: 1.25rem;
+  row-gap: 0.5rem;
+  flex-wrap: wrap;
+  padding-block: 0.9rem 0.7rem;
 }
 
 .brand {
   text-decoration: none;
   color: inherit;
-  flex-grow: 1;
+  margin-right: auto;
+}
+
+.brand .brand-title,
+.brand .brand-sub {
+  display: block;
+  margin: 0;
+  line-height: 1.2;
 }
 
 .brand .brand-title {
-  font-size: 1rem;
-  margin: 0;
+  font-size: 0.9rem;
 }
 
 .brand .brand-sub {
-  font-size: 0.95rem;
-  font-weight: 600;
-  margin: 0;
+  font-size: 1rem;
+  font-weight: 700;
 }
 
 .site-nav {
   display: flex;
   flex-wrap: wrap;
-  gap: 1.25rem;
+  gap: 0.35rem 1rem;
   font-weight: 700;
-  list-style: none;
-  margin: 0;
-  padding: 0;
 }
 
 .site-nav a {
@@ -121,8 +125,53 @@ img {
   text-decoration: none;
 }
 
-.site-nav a:hover {
+.site-nav a:hover,
+.site-nav a[aria-current="page"] {
   text-decoration: underline;
+}
+
+.lang-switch {
+  display: flex;
+  gap: 0.6rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-size: 0.85rem;
+}
+
+.lang-switch a {
+  color: inherit;
+  text-decoration: none;
+  opacity: 0.7;
+}
+
+.lang-switch a:hover {
+  opacity: 1;
+}
+
+.lang-switch .current a {
+  opacity: 1;
+  font-weight: 700;
+  text-decoration: underline;
+}
+
+/* On phones: brand on its own line, nav + language on the next, no clutter. */
+@media (max-width: 600px) {
+  .site-header .bar {
+    align-items: flex-start;
+  }
+  .brand {
+    flex-basis: 100%;
+    margin-right: 0;
+  }
+  .site-nav {
+    order: 2;
+    font-size: 0.95rem;
+  }
+  .lang-switch {
+    order: 1;
+    margin-left: auto;
+  }
 }
 
 /* --- Layout shells ---------------------------------------------------------- */
@@ -146,8 +195,10 @@ main {
   margin-block: 0.5rem 1.5rem;
 }
 
-.intro h2 {
+.intro h2,
+.intro .headline {
   margin-top: 0;
+  font-size: 1.4rem;
 }
 
 .prose {
@@ -158,9 +209,15 @@ main {
   margin-top: 2rem;
 }
 
-.muted {
-  color: #4a4646;
+/* Secondary text on the light page background. */
+.muted,
+.footer-meta {
+  color: #3d3a3a;
   font-size: 0.9rem;
+}
+
+.record-note {
+  margin-top: 1rem;
 }
 
 /* --- Flower grid ---------------------------------------------------------- */
@@ -356,15 +413,40 @@ main {
   justify-content: space-between;
 }
 
+.site-footer p {
+  margin: 0.35rem 0;
+}
+
 .site-footer a {
-  color: var(--neutral-content);
+  color: #ffffff;
+}
+
+/* Readable secondary text on the dark footer (overrides the light-page value). */
+.site-footer .footer-meta {
+  color: #ded9d9;
+  font-size: 0.85rem;
+}
+
+.site-footer .footer-meta a {
+  color: #ded9d9;
+  text-decoration: underline;
 }
 
 .site-footer .footer-title {
   font-weight: 700;
   text-transform: uppercase;
-  font-size: 0.8rem;
-  opacity: 0.7;
+  font-size: 0.78rem;
+  letter-spacing: 0.03em;
+  color: #cfc9c9;
   display: block;
-  margin-bottom: 0.4rem;
+  margin-bottom: 0.5rem;
+}
+
+.site-footer .footer-links {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
 }

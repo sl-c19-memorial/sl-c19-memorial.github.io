@@ -1,8 +1,10 @@
 {{ define "main" }}
   {{ $people := sort .Pages "Params.deathDate" "desc" }}
-  <p class="muted"><a href="{{ .Parent.RelPermalink }}">&larr; All {{ .Parent.Title | lower }}</a></p>
-  <h1>{{ .Title }}</h1>
-  <p class="muted">{{ len $people }} people documented</p>
+  {{ $label := partial "term-label.html" . }}
+  {{ $facet := i18n (printf "facet.%s" .Data.Plural) }}
+  <p class="footer-meta"><a href="{{ .Parent.RelPermalink }}">&larr; {{ i18n "backToFacet" (dict "facet" $facet) }}</a></p>
+  <h1>{{ $label }}</h1>
+  <p class="footer-meta">{{ i18n "peopleDocumented" (dict "count" (len $people)) }}</p>
   {{ $paged := .Paginate $people }}
   <div class="grid">
     {{ range $paged.Pages }}

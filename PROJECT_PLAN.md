@@ -44,37 +44,39 @@ data pipeline repos stay as-is; this repo consumes their published output.
 
 ```
 memorial-static/
-├── hugo.toml                     # config: taxonomies, permalinks, pagination
+├── hugo.toml                     # config: languages, taxonomies, permalinks, menu
 ├── data/
-│   ├── covid19_deaths.json       # committed snapshot (newest-first, slug-normalised)
+│   ├── covid19_deaths.json       # committed snapshot (newest-first, slug-normalised,
+│   │                             #   photo paths rewritten to assets/people/)
 │   ├── geo.json                  # provinces / districts / cities, en|si|ta
 │   └── site_stats.json           # headline counters (official toll, documented count)
 ├── scripts/
-│   └── fetch-data.mjs            # the only network step; refreshes data/
+│   └── fetch-data.mjs            # the only network step; refreshes data/ + vendors photos
 ├── content/
-│   ├── _index.md
-│   ├── about.md                  # ported from about_en.mdx
-│   ├── approach.md               # ported from approach_en.mdx
-│   ├── browse/_index.md
-│   └── people/_content.gotmpl    # content adapter: 1 page per person, from data
+│   ├── _index.md .si.md .ta.md   # home intro prose (per language)
+│   ├── about.md  .si.md .ta.md
+│   ├── approach.md .si.md .ta.md
+│   ├── browse/_index.md .si .ta
+│   ├── people/_index.md .si .ta
+│   └── people/_content.gotmpl    # content adapter: 1 page/person/language, from data
+├── i18n/
+│   └── en.toml si.toml ta.toml   # UI strings
 ├── layouts/
-│   ├── baseof.html
-│   ├── home.html                 # flower grid, paginated
-│   ├── section.html              # /people/ list
-│   ├── page.html                 # prose pages
-│   ├── term.html                 # one facet value → flower grid
-│   ├── taxonomy.html             # list of facet values + counts
+│   ├── baseof.html home.html section.html page.html
+│   ├── term.html taxonomy.html   # one facet value / list of facet values
 │   ├── browse/section.html       # all facets on one page
 │   ├── people/page.html          # one person
 │   ├── 404.html
-│   └── partials/                 # head, header, footer, person-cell, pagination
+│   ├── _shortcodes/documented.html
+│   └── partials/                 # head, header, footer, person-cell, pagination,
+│                                 #   portrait, loc-place, geo-maps, term-label
 ├── assets/
 │   ├── css/main.css              # DaisyUI "light" theme ported to CSS variables
-│   └── img/flower.png
-├── static/                       # favicon, OG image
-├── i18n/                         # (Stage C) en/si/ta strings
+│   ├── img/flower.png
+│   └── people/<slug>.jpg         # vendored submission photos
+├── static/                       # favicon, OG image, CNAME
 └── .github/workflows/
-    ├── refresh-data.yml          # daily: fetch-data → commit
+    ├── refresh-data.yml          # daily: fetch-data → commit data/ + assets/people/
     └── build.yml                 # push: hugo → GitHub Pages
 ```
 
@@ -87,15 +89,15 @@ One record in `data/covid19_deaths.json`:
 | `indexKey` | `2020-11-02-0001` | Unique id. Shown on the person page. A few upstream values are malformed. |
 | `slug` | `2020-11-02-0001` | Added by `fetch-data.mjs`: cleaned, unique, URL-safe. Drives the permalink. |
 | `deathDate` | `2020-11-02T05:30:00.000+05:30` | ISO with +5:30 offset. |
-| `province` / `district` / `city` | `Western` / `Colombo` / `Colombo 12` | English keys. Localised names come from `geo.json` (Stage C). `city` missing for ~15 records. |
+| `province` / `district` / `city` | `Western` / `Colombo` / `Colombo 12` | English keys. Localised names come from `geo.json` at render time. `city` missing for ~15 records. |
 | `ageType` | `FINE` \| `ROUGH` | `ROUGH` (1 record) carries a range like `70-80`. |
 | `ageValue` | `89` | String. |
 | `gender` | `Male` \| `Female` | ~0.5% blank. |
 | `deathPlace` | `Colombo General Hospital` | Free text. |
 | `incarcerated` | `false` | Flagged where the source noted a prison death. |
 | `sourceType` | `DGI_PR_DOCS` \| `VERIFIED_SUBMISSION` | 4 records blank. |
-| `sourceRef` | `5a281a09…` | Hash → DGI report in `scraped-dgi-reports`. |
-| `detail` | `null` or `{name, occupation, description, photo}` | Non-null only for the 7 verified family submissions. |
+| `sourceRef` | `5a281a09…` | Hash → DGI report in `scraped-dgi-reports` (citation link only). |
+| `detail` | `null` or `{name, occupation, description, photo}` | Non-null only for the 7 verified family submissions. `photo` rewritten by `fetch-data.mjs` to `people/<slug>.jpg` (or `null` if none / unreachable). |
 
 **Derived at build time** (in the content adapter): `ageBand`
 (`below-30` / `30-59` / `60-and-above`), `year` (from `deathDate`).
@@ -183,27 +185,46 @@ node scripts/fetch-data.mjs && hugo --gc --minify
 - **"Filter" page.** A plain `<form method="get">` whose submit maps to an
   existing pre-built facet URL — the old filter UX, zero JS.
 
-## Stage C — Multilingual + secondary datasets
+## Stage C — Multilingual & self-containment ✅ (done)
 
-- **Sinhala & Tamil.** Hugo multilingual mode; port `lang/{si,ta}.json` →
-  `i18n/{si,ta}.toml`; translate `about` / `approach`; localise place names by
-  joining `geo.json` in the content adapter; language switcher in the header
-  (the original's `/si/…` `/ta/…` prefixes).
-- **DGI press-release archive.** Pull `scraped-dgi-reports` into `data/`; build
-  `/sources/dgi/<ref>/` pages from `dgi_reports_latest.json` (title, date,
-  scanned image); link each person's source line to its actual release instead
-  of a GitHub blob URL.
+### Delivered
+
+- [x] **Sinhala & Tamil.** Hugo multilingual mode — English at `/`, Sinhala at
+      `/si/`, Tamil at `/ta/`. UI strings ported to `i18n/{en,si,ta}.toml`;
+      `about` / `approach` / home intro translated (`content/<name>.<lang>.md`);
+      header language switcher that cross-links the current page's translations
+      (including generated person pages, via `.EnableAllLanguages`).
+- [x] **Localised place names.** Province / district / city names render in the
+      active language via `data/geo.json`, looked up through a cached map
+      (`partials/geo-maps.html` + `loc-place.html`); taxonomy term headings and
+      the `/browse/` facets are localised the same way.
+- [x] **Self-contained.** `fetch-data.mjs` downloads the 6 submission photos into
+      `assets/people/` and rewrites `detail.photo` to a local path. The build
+      now touches nothing outside this repo. Source repos are archived; the
+      committed snapshot is the record.
+- [x] `static/CNAME` = `srilankac19memorial.org`.
+
+### Remaining (secondary datasets — optional)
+
+- **DGI press-release archive.** Vendor `scraped-dgi-reports` (~1,300 releases +
+  scanned images) into `data/` + `assets/`; build `/sources/dgi/<ref>/` pages;
+  point each person's source line at the local release instead of the GitHub
+  citation link.
 - **Aggregate context.** Use `dgi_reports_deaths_latest.tsv` (daily age/sex
   bucket counts) for a "what the government reported vs. what we could document"
   panel on `/approach/`.
+- **Native-speaker review** of the newly authored si/ta UI strings (pager,
+  facet labels, age bands, notes) in `i18n/{si,ta}.toml`.
 
 ## Stage D — Living-archive automation & hosting
 
-- **Decide the host.** Recommended: **GitHub Pages** (free, no account risk,
-  deploy included in `build.yml`). Cloudflare Pages as an alternative;
-  Netlify-as-static-drop if the domain stays there.
-- **Update loop.** `refresh-data.yml` (daily) commits data diffs with dated
-  messages → push triggers `build.yml` → deploy. No build hooks, no functions.
+- **Host: GitHub Pages** (decided). `build.yml` builds with Hugo extended and
+  deploys via `actions/deploy-pages`; `static/CNAME` carries the custom domain.
+  Needs *Settings → Pages → Source: GitHub Actions* enabled on the repo, and the
+  DNS for `srilankac19memorial.org` pointed at Pages.
+- **Update loop.** `refresh-data.yml` (daily) commits `data/` + `assets/people/`
+  diffs with dated messages → push triggers `build.yml` → deploy. No build
+  hooks, no functions.
 - **Monthly snapshot tags.** `archive/2026-08` tags so the archive has
   addressable historical states.
 - **Forms, statically.** `submit` and `contact` become either a documented
@@ -221,8 +242,8 @@ node scripts/fetch-data.mjs && hugo --gc --minify
 - Per-person Open Graph images (Hugo `images` render hook or a small generator).
 - Accessibility pass (landmarks, focus states, colour contrast on the grey base,
   `alt` text, reduced-motion for the hover scale).
-- Performance budget: inline critical CSS, self-host the Noto subset for the
-  Latin range, lazy-load flower images (already `loading="lazy"`).
+- Performance budget: inline critical CSS, lazy-load flower images (already
+  `loading="lazy"`). Fonts stay on Google Fonts by decision — good enough.
 - Credits / licence page; data dictionary; "how to contribute a correction".
 - Remove `memorial-web` from production once parity is confirmed; leave it
   archived.
@@ -244,14 +265,17 @@ node scripts/fetch-data.mjs && hugo --gc --minify
 
 ## Risks / open questions
 
-- **Google Fonts dependency.** Currently linked from `fonts.googleapis.com`. For
-  a true offline-durable archive, self-host the Noto subsets (Stage E).
-- **Submitted photos** are hot-linked from `raw.githubusercontent.com`. Only 7
-  today; Stage C should vendor them into `assets/` so the archive is
-  self-contained.
-- **Scale.** At ~767 people the build is ~0.5 s. The design (content adapter +
-  taxonomies) scales to tens of thousands of pages without change; only build
-  time grows.
-- **Upstream longevity.** If the `memorial-dataset` repo stops updating, the
-  committed snapshot simply becomes the permanent record — which is the point.
-- **Host choice** (Stage D) is the one decision that needs an owner.
+- **Google Fonts dependency.** UI strings and Sinhala/Tamil rendering pull Noto
+  from `fonts.googleapis.com`. Kept by decision ("default fonts are okay"); a
+  fully offline archive would self-host the subsets, but that is not planned.
+- **Scale.** At ~767 people × 3 languages the build is ~3 s. The design (content
+  adapter + taxonomies + cached geo map) scales to tens of thousands of pages;
+  only build time grows.
+- **Upstream is archived.** The committed snapshot in `data/` + `assets/people/`
+  is now the record. `fetch-data.mjs` still works against the archived repos
+  (they stay readable) but nothing depends on them at build time.
+- **DGI citation links** on person pages point at the archived
+  `scraped-dgi-reports`. Vendoring that archive (Stage C remaining) would make
+  even those local.
+- **si/ta wording** for the strings authored in this rebuild wants a native
+  review before wide sharing.

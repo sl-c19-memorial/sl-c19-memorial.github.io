@@ -1,10 +1,7 @@
 {{ define "main" }}
   <article class="prose">
-    <h1>Page not found</h1>
-    <p>
-      That page isn't here. The people documented in this archive live under
-      <a href="{{ "/" | relURL }}">the memorial</a>, and can be browsed by
-      <a href="{{ "/browse/" | relURL }}">province, year, age or sex</a>.
-    </p>
+    <h1>{{ i18n "notFoundTitle" }}</h1>
+    <p>{{ i18n "notFoundBody" }}</p>
+    <p><a href="{{ .Site.Home.RelPermalink }}">{{ i18n "brandLine2" }}</a></p>
   </article>
 {{ end }}

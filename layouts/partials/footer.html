@@ -1,20 +1,22 @@
 {{ $stats := hugo.Data.site_stats }}
+{{ $everyone := .Site.GetPage "/people" }}
 <footer class="site-footer">
   <div class="container">
     <div>
-      <p class="footer-title">COVID-19 Memorial</p>
-      <p>In memory of those we lost to COVID-19 in Sri Lanka.</p>
-      <p class="muted">
-        {{ with $stats.documented }}{{ . }} people documented{{ end }}
-        {{ with $stats.refreshedAt }} &middot; data refreshed {{ dateFormat "2 Jan 2006" . }}{{ end }}
+      <p class="footer-title">{{ i18n "brandLine2" }}</p>
+      <p>{{ i18n "footerTagline" }}</p>
+      <p class="footer-meta">
+        {{ with $everyone }}<a href="{{ .RelPermalink }}">{{ i18n "everyoneDocumented" }}</a> &middot; {{ end }}
+        {{ with $stats.documented }}{{ i18n "peopleDocumentedShort" (dict "count" .) }}{{ end }}
+        {{ with $stats.refreshedAt }} &middot; {{ i18n "dataRefreshed" (dict "date" (time.Format ":date_medium" .)) }}{{ end }}
       </p>
-      <p class="muted">Copyright &copy; 2021 &middot; MIT-licensed open data and source.</p>
+      <p class="footer-meta">{{ i18n "footerCopyright" }}</p>
     </div>
     <div>
-      <span class="footer-title">Source</span>
-      <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:.25rem">
-        <li><a href="https://github.com/sl-c19-memorial/memorial-dataset">Death records dataset</a></li>
-        <li><a href="https://github.com/sl-c19-memorial/scraped-dgi-reports">Scraped DGI reports</a></li>
+      <span class="footer-title">{{ i18n "footerSources" }}</span>
+      <ul class="footer-links">
+        <li><a href="https://github.com/sl-c19-memorial/memorial-dataset">memorial-dataset</a></li>
+        <li><a href="https://github.com/sl-c19-memorial/scraped-dgi-reports">scraped-dgi-reports</a></li>
       </ul>
     </div>
   </div>

@@ -4,7 +4,7 @@
     {{ $people = sort $people "Params.deathDate" "desc" }}
     <h1>{{ .Title }}</h1>
     {{ with .Content }}<div class="prose">{{ . }}</div>{{ end }}
-    <p class="muted">{{ len $people }} people</p>
+    <p class="footer-meta">{{ i18n "peopleDocumented" (dict "count" (len $people)) }}</p>
     {{ $paged := .Paginate $people }}
     <div class="grid">
       {{ range $paged.Pages }}
@@ -17,9 +17,7 @@
     <div class="prose">
       {{ .Content }}
       <ul>
-        {{ range .Pages }}
-          <li><a href="{{ .RelPermalink }}">{{ .Title }}</a></li>
-        {{ end }}
+        {{ range .Pages }}<li><a href="{{ .RelPermalink }}">{{ .Title }}</a></li>{{ end }}
       </ul>
     </div>
   {{ end }}

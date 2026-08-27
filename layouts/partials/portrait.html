@@ -1,0 +1,11 @@
+{{- /* dict: params (person .Params), size (px) */ -}}
+{{- $p := .params -}}
+{{- $size := .size -}}
+{{- $src := resources.Get "img/flower.png" -}}
+{{- $isPhoto := false -}}
+{{- with $p.detail -}}
+  {{- with .photo -}}
+    {{- with resources.Get . -}}{{- $src = . -}}{{- $isPhoto = true -}}{{- end -}}
+  {{- end -}}
+{{- end -}}
+<img class="flower{{ if $isPhoto }} photo{{ end }}" src="{{ $src.RelPermalink }}" width="{{ $size }}" height="{{ $size }}" loading="lazy" alt="" />

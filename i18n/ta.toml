@@ -1,0 +1,111 @@
+[brandLine1]
+other = "இலங்கை"
+[brandLine2]
+other = "கோவிட்-19 நினைவகம்"
+
+[headline]
+other = "இலங்கையில் கோவிட்-19 தொற்றுநோயால் {{ .count }} பேர் உயிரிழந்துள்ளனர்"
+
+[peopleDocumentedShort]
+other = "{{ .count }} நபர்கள் ஆவணப்படுத்தப்பட்டுள்ளனர்"
+[dataRefreshed]
+other = "தரவு புதுப்பிக்கப்பட்டது {{ .date }}"
+
+[everyoneDocumented]
+other = "ஆவணப்படுத்தப்பட்ட அனைவரும்"
+[allPeopleBack]
+other = "அனைத்து {{ .count }} நபர்கள்"
+[peopleDocumented]
+other = "{{ .count }} நபர்கள் ஆவணப்படுத்தப்பட்டுள்ளனர்"
+
+[browseBy]
+other = "{{ .facet }} வாரியாக உலாவு"
+[backToFacet]
+other = "அனைத்து {{ .facet }}"
+[pagerNewer]
+other = "புதியவை"
+[pagerOlder]
+other = "பழையவை"
+
+[died]
+other = "இறந்தது {{ .date }}"
+[ageUnknown]
+other = "வயது தெரியவில்லை"
+[nameUnknown]
+other = "பெயர் தெரியவில்லை"
+
+[fldProvince]
+other = "மாகாணம்"
+[fldDistrict]
+other = "மாவட்டம்"
+[fldCity]
+other = "நகரம்"
+[fldPlaceOfDeath]
+other = "இறந்த இடம்"
+[fldOccupation]
+other = "தொழில்"
+[fldSource]
+other = "ஆதாரம்"
+[fldNote]
+other = "குறிப்பு"
+
+[srcDgi]
+other = "அரசு தகவல் திணைக்களம்"
+[srcSubmission]
+other = "சரிபார்க்கப்பட்ட குடும்ப சமர்ப்பிப்பு"
+[srcUnrecorded]
+other = "பதிவு செய்யப்படவில்லை"
+[srcReference]
+other = "மூலம்"
+[incarceratedNote]
+other = "இறக்கும் போது சிறையில் இருந்ததாக பதிவு செய்யப்பட்டது."
+[recordNote]
+other = "பதிவு {{ .key }}. அரசு பதிவின்படி காட்டப்பட்டுள்ளது."
+[getInTouch]
+other = "ஒரு விவரம் தவறாக இருந்தால், தயவுசெய்து எங்களைத் தொடர்பு கொள்ளவும்."
+
+["sex.Male"]
+other = "ஆண்"
+["sex.Female"]
+other = "பெண்"
+["sex.Unknown"]
+other = "பாலினம் பதிவு செய்யப்படவில்லை"
+
+["band.below-30"]
+other = "30 க்கு கீழே"
+["band.30-59"]
+other = "30 முதல் 59 வரை"
+["band.60-and-above"]
+other = "60 மற்றும் அதற்கு மேல்"
+
+["facet.provinces"]
+other = "மாகாணம்"
+["facet.districts"]
+other = "மாவட்டம்"
+["facet.years"]
+other = "இறந்த வருடம்"
+["facet.sexes"]
+other = "பாலினம்"
+["facet.agebands"]
+other = "வயது வரம்பு"
+["facet.sources"]
+other = "ஆதாரம்"
+
+[footerTagline]
+other = "இலங்கையில் கோவிட்-19 இனால் உயிர் இழந்தவர்களின் நினைவாக."
+[footerSources]
+other = "மூல தரவு"
+[footerCopyright]
+other = "திறந்த தரவு மற்றும் மூலக்குறியீடு MIT உரிமத்தின் கீழ்."
+
+[notFoundTitle]
+other = "பக்கம் கிடைக்கவில்லை"
+[notFoundBody]
+other = "அந்தப் பக்கம் இங்கு இல்லை. இந்த ஆவணக் காப்பகத்தில் உள்ளவர்களை மாகாணம், வருடம், வயது அல்லது பாலினம் வாரியாக உலாவலாம்."
+
+["menu.browse"]
+other = "உலாවு"
+["menu.about"]
+other = "எம்மைப் பற்றி"
+["menu.approach"]
+other = "அணுகுமுறை"

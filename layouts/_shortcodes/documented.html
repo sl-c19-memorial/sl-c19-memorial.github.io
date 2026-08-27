@@ -1,0 +1,1 @@
+{{- with hugo.Data.site_stats -}}{{- .documented -}}{{- else -}}{{- len (where site.RegularPages "Type" "people") -}}{{- end -}}

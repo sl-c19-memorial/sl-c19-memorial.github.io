@@ -2,22 +2,14 @@
   <h1>{{ .Title }}</h1>
   <div class="prose">{{ .Content }}</div>
 
-  {{ $labels := dict
-    "provinces" "Province"
-    "districts" "District"
-    "years" "Year of death"
-    "sexes" "Sex"
-    "agebands" "Age band"
-    "sources" "Source"
-  }}
   {{ range $name, $terms := site.Taxonomies }}
     <section class="browse-group">
-      <h2>{{ index $labels $name | default (humanize $name) }}</h2>
+      <h2>{{ i18n (printf "facet.%s" $name) }}</h2>
       <ul class="term-list">
         {{ range $terms.ByCount }}
           <li>
             <a href="{{ .Page.RelPermalink }}">
-              <span>{{ .Page.Title }}</span>
+              <span>{{ partial "term-label.html" .Page }}</span>
               <span class="count">{{ .Count }}</span>
             </a>
           </li>
