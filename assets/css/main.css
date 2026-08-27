@@ -158,19 +158,23 @@ img {
 /* On phones: brand on its own line, nav + language on the next, no clutter. */
 @media (max-width: 600px) {
   .site-header .bar {
-    align-items: flex-start;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    row-gap: 0.6rem;
   }
   .brand {
-    flex-basis: 100%;
     margin-right: 0;
   }
   .site-nav {
-    order: 2;
+    order: 1;
+    justify-content: center;
     font-size: 0.95rem;
   }
   .lang-switch {
-    order: 1;
-    margin-left: auto;
+    order: 2;
+    margin-left: 0;
+    justify-content: center;
   }
 }
 
