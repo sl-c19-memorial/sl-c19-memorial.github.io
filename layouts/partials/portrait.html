@@ -1,6 +1,7 @@
 {{- /* dict: params (person .Params), size (px) */ -}}
 {{- $p := .params -}}
-{{- $size := .size -}}
+{{- $size := int .size -}}
+{{- $size2 := mul $size 2 -}}
 {{- $src := resources.Get "img/flower.png" -}}
 {{- $isPhoto := false -}}
 {{- with $p.detail -}}
@@ -10,4 +11,26 @@
 {{- end -}}
 {{- $alt := "" -}}
 {{- if and $isPhoto $p.personName -}}{{- $alt = $p.personName -}}{{- end -}}
-<img class="flower{{ if $isPhoto }} photo{{ end }}" src="{{ $src.RelPermalink }}" width="{{ $size }}" height="{{ $size }}" loading="lazy" alt="{{ $alt }}" />
+{{- /* Photos are cropped to a square (CSS already covers + circles them);
+       the flower placeholder keeps its aspect ratio. Both are emitted as
+       resized WebP with a same-size original-format fallback via <picture>.
+       Hugo hashes each variant's filename, so they cache safely. */ -}}
+{{- $spec := cond $isPhoto "fill" "fit" -}}
+{{- $ext := cond (eq $src.MediaType.SubType "png") "png" "jpeg" -}}
+{{- $w1 := $src.Process (printf "%s %dx%d %s q82" $spec $size $size $ext) -}}
+{{- $w2 := $src.Process (printf "%s %dx%d %s q82" $spec $size2 $size2 $ext) -}}
+{{- $p1 := $src.Process (printf "%s %dx%d webp q82" $spec $size $size) -}}
+{{- $p2 := $src.Process (printf "%s %dx%d webp q82" $spec $size2 $size2) -}}
+<picture>
+  <source type="image/webp" srcset="{{ $p1.RelPermalink }} 1x, {{ $p2.RelPermalink }} 2x" />
+  <img
+    class="flower{{ if $isPhoto }} photo{{ end }}"
+    src="{{ $w1.RelPermalink }}"
+    srcset="{{ $w1.RelPermalink }} 1x, {{ $w2.RelPermalink }} 2x"
+    width="{{ $w1.Width }}"
+    height="{{ $w1.Height }}"
+    loading="lazy"
+    decoding="async"
+    alt="{{ $alt }}"
+  />
+</picture>
