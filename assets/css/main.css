@@ -324,6 +324,16 @@ main {
   filter: grayscale(1);
 }
 
+/* Detail page: show the whole submission photo, uncropped. */
+.person .flower.photo-full {
+  width: 240px;
+  height: auto;
+  max-width: 100%;
+  border-radius: 8px;
+  object-fit: contain;
+  filter: grayscale(1);
+}
+
 .person dl {
   text-align: left;
   display: grid;

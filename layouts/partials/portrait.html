@@ -1,7 +1,9 @@
-{{- /* dict: params (person .Params), size (px) */ -}}
+{{- /* dict: params (person .Params), size (px), crop (bool, default true) */ -}}
 {{- $p := .params -}}
 {{- $size := int .size -}}
 {{- $size2 := mul $size 2 -}}
+{{- $crop := true -}}
+{{- if isset . "crop" -}}{{- $crop = .crop -}}{{- end -}}
 {{- $src := resources.Get "img/flower.png" -}}
 {{- $isPhoto := false -}}
 {{- with $p.detail -}}
@@ -11,20 +13,34 @@
 {{- end -}}
 {{- $alt := "" -}}
 {{- if and $isPhoto $p.personName -}}{{- $alt = $p.personName -}}{{- end -}}
-{{- /* Photos are cropped to a square (CSS already covers + circles them);
-       the flower placeholder keeps its aspect ratio. Both are emitted as
-       resized WebP with a same-size original-format fallback via <picture>.
-       Hugo hashes each variant's filename, so they cache safely. */ -}}
-{{- $spec := cond $isPhoto "fill" "fit" -}}
+{{- /* The flower placeholder and uncropped photos keep their aspect ratio
+       (fit / resize-by-width); cropped photos are squared off (fill). Each is
+       emitted as resized WebP 1x/2x with a same-size JPEG/PNG fallback via
+       <picture>; width/height come from the processed resource. Hugo hashes
+       every variant's filename, so they cache safely. */ -}}
 {{- $ext := cond (eq $src.MediaType.SubType "png") "png" "jpeg" -}}
-{{- $w1 := $src.Process (printf "%s %dx%d %s q82" $spec $size $size $ext) -}}
-{{- $w2 := $src.Process (printf "%s %dx%d %s q82" $spec $size2 $size2 $ext) -}}
-{{- $p1 := $src.Process (printf "%s %dx%d webp q82" $spec $size $size) -}}
-{{- $p2 := $src.Process (printf "%s %dx%d webp q82" $spec $size2 $size2) -}}
+{{- $sizing := "" -}}
+{{- $sizing2 := "" -}}
+{{- if not $isPhoto -}}
+  {{- $sizing = printf "fit %dx%d" $size $size -}}
+  {{- $sizing2 = printf "fit %dx%d" $size2 $size2 -}}
+{{- else if $crop -}}
+  {{- $sizing = printf "fill %dx%d" $size $size -}}
+  {{- $sizing2 = printf "fill %dx%d" $size2 $size2 -}}
+{{- else -}}
+  {{- $sizing = printf "resize %dx" $size -}}
+  {{- $sizing2 = printf "resize %dx" $size2 -}}
+{{- end -}}
+{{- $w1 := $src.Process (printf "%s %s q82" $sizing $ext) -}}
+{{- $w2 := $src.Process (printf "%s %s q82" $sizing2 $ext) -}}
+{{- $p1 := $src.Process (printf "%s webp q82" $sizing) -}}
+{{- $p2 := $src.Process (printf "%s webp q82" $sizing2) -}}
+{{- $class := "flower" -}}
+{{- if $isPhoto -}}{{- $class = cond $crop "flower photo" "flower photo-full" -}}{{- end -}}
 <picture>
   <source type="image/webp" srcset="{{ $p1.RelPermalink }} 1x, {{ $p2.RelPermalink }} 2x" />
   <img
-    class="flower{{ if $isPhoto }} photo{{ end }}"
+    class="{{ $class }}"
     src="{{ $w1.RelPermalink }}"
     srcset="{{ $w1.RelPermalink }} 1x, {{ $w2.RelPermalink }} 2x"
     width="{{ $w1.Width }}"

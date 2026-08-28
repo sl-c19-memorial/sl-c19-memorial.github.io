@@ -15,7 +15,7 @@
     <div class="card-body person">
       {{ with $p.personName }}<h1>{{ . }}</h1>{{ else }}<h1>{{ i18n "nameUnknown" }}</h1>{{ end }}
 
-      {{ partial "portrait.html" (dict "params" $p "size" 160) }}
+      {{ partial "portrait.html" (dict "params" $p "size" 240 "crop" false) }}
 
       <p class="age">
         {{ with $p.ageValue }}{{ . }}{{ else }}{{ i18n "ageUnknown" }}{{ end }}{{ with $p.sex }}, {{ i18n (printf "sex.%s" .) }}{{ end }}
